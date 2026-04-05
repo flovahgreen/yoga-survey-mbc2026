@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>관리자 — 요가 수업 설문 결과</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ede6d8;
+      --surface: #fdf8f2;
+      --surface2: #f5ede0;
+      --border: #e0d0bc;
+      --accent: #8b6b52;
+      --accent-light: #f0e6d9;
+      --text: #2e1f12;
+      --muted: #9c8070;
+    }
+
+    body {
+      font-family: 'Noto Serif KR', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ---- 레이아웃 ---- */
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 200px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 8px 12px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Noto Serif KR', serif;
+    }
+
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 700; }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .main { margin-left: 200px; padding: 32px; flex: 1; }
+
+    /* ---- 상단 ---- */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+
+    .page-title { font-size: 20px; font-weight: 700; font-family: 'Noto Serif KR', serif; }
+    .page-sub { font-size: 12px; color: var(--muted); margin-top: 5px; }
+
+    .refresh-btn {
+      padding: 9px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Noto Serif KR', serif;
+      transition: background 0.15s;
+    }
+    .refresh-btn:hover { background: var(--accent-light); }
+
+    /* ---- 통계 카드 ---- */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .stat-value { font-size: 26px; font-weight: 700; color: var(--accent); font-family: 'Noto Serif KR', serif; }
+    .stat-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+    /* ---- 차트 그리드 ---- */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    .chart-card.wide { grid-column: 1 / -1; }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 18px;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    .chart-wrap { position: relative; height: 200px; }
+
+    /* ---- 바 차트 (커스텀) ---- */
+    .bar-item { margin-bottom: 16px; }
+    .bar-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+    .bar-pct { color: var(--accent); font-weight: 700; }
+    .bar-track { background: var(--surface2); border-radius: 6px; height: 7px; overflow: hidden; }
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #8b6b52, #c9a882);
+      transition: width 0.7s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ---- 응답 목록 ---- */
+    .list-view { display: none; }
+    .list-view.active { display: block; }
+    .charts-view { display: block; }
+    .charts-view.hidden { display: none; }
+
+    .list-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .list-title { font-size: 15px; font-weight: 700; font-family: 'Noto Serif KR', serif; }
+    .list-count { font-size: 12px; color: var(--muted); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    thead th {
+      padding: 10px 12px;
+      text-align: left;
+      color: var(--muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.05em;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td { padding: 12px 12px; color: var(--text); vertical-align: top; }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      margin: 1px;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+
+    .intensity-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-1 { background: #edf4fb; color: #5a8aae; border: 1px solid #c8dded; }
+    .badge-2 { background: #edf6f0; color: #4a8a5a; border: 1px solid #b8dcc0; }
+    .badge-3 { background: #fdf5e6; color: #a0742a; border: 1px solid #e8d09a; }
+    .badge-4 { background: #fdf0ee; color: #a04040; border: 1px solid #e8c0b8; }
+
+    .del-btn {
+      padding: 4px 10px;
+      background: #fdf0ee;
+      color: #a04040;
+      border: 1px solid #e8c0b8;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-family: 'Noto Serif KR', serif;
+      transition: background 0.15s;
+    }
+    .del-btn:hover { background: #fae0dc; }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .empty .e-icon { font-size: 40px; margin-bottom: 12px; }
+
+    @media (max-width: 900px) {
+      .sidebar { width: 56px; }
+      .logo, .nav-item span:last-child { display: none; }
+      .main { margin-left: 56px; padding: 20px 16px; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .chart-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="sidebar">
+    <div class="logo">🧘 관리자</div>
+    <button class="nav-item active" id="navSummary" onclick="switchView('summary')">
+      <span>📊</span><span>통계 요약</span>
+    </button>
+    <button class="nav-item" id="navList" onclick="switchView('list')">
+      <span>📋</span><span>응답 목록</span>
+    </button>
+    <div class="sidebar-bottom">
+      <button class="nav-item" onclick="window.open('/', '_blank')">
+        <span>🔗</span><span>설문 페이지</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">MBC 경영센터 요가 설문 결과</div>
+        <div class="page-sub" id="lastUpdate">불러오는 중...</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="refresh-btn" onclick="loadAll()">↻ 새로고침</button>
+        <button class="refresh-btn" onclick="downloadCSV()" style="background:var(--accent);color:#fdf8f2;border-color:var(--accent)">↓ CSV 저장</button>
+      </div>
+    </div>
+
+    <!-- 통계 카드 -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-label">총 참여자</div>
+        <div class="stat-value" id="sTotal">0</div>
+        <div class="stat-sub">명</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">가장 많은 수준</div>
+        <div class="stat-value" style="font-size:16px;padding-top:6px" id="sLevel">—</div>
+        <div class="stat-sub">경험 수준</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">선호 강도</div>
+        <div class="stat-value" style="font-size:15px;padding-top:6px" id="sIntensity">—</div>
+        <div class="stat-sub">1순위</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">주요 목표</div>
+        <div class="stat-value" style="font-size:15px;padding-top:6px" id="sGoal">—</div>
+        <div class="stat-sub">1순위</div>
+      </div>
+    </div>
+
+    <!-- 차트 뷰 -->
+    <div class="charts-view" id="chartsView">
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="card-title">경험 수준 분포</div>
+          <div class="chart-wrap"><canvas id="levelChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="card-title">선호 수업 스타일</div>
+          <div class="chart-wrap"><canvas id="styleChart"></canvas></div>
+        </div>
+        <div class="chart-card wide">
+          <div class="card-title">희망 수업 강도</div>
+          <div id="intensityBars"></div>
+        </div>
+        <div class="chart-card wide">
+          <div class="card-title">수업 목표 (복수응답)</div>
+          <div id="goalBars"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 목록 뷰 -->
+    <div class="list-view" id="listView">
+      <div class="list-card">
+        <div class="list-header">
+          <div class="list-title">전체 응답</div>
+          <div class="list-count" id="listCount"></div>
+        </div>
+        <div style="overflow-x:auto" id="tableWrap"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const COLORS = ['#8b6b52','#c9a882','#d4b896','#e8d5be','#a0845c','#7a5c44','#bf9a76','#b08060'];
+
+  Chart.defaults.color = '#9c8070';
+  Chart.defaults.borderColor = '#e0d0bc';
+
+  let chartInstances = {};
+  let currentView = 'summary';
+
+  function switchView(view) {
+    currentView = view;
+    document.getElementById('chartsView').classList.toggle('hidden', view !== 'summary');
+    document.getElementById('listView').classList.toggle('active', view === 'list');
+    document.getElementById('navSummary').classList.toggle('active', view === 'summary');
+    document.getElementById('navList').classList.toggle('active', view === 'list');
+  }
+
+  function makeDonut(id, labels, data) {
+    if (chartInstances[id]) chartInstances[id].destroy();
+    const ctx = document.getElementById(id).getContext('2d');
+    chartInstances[id] = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{ data, backgroundColor: COLORS, borderColor: '#161228', borderWidth: 3 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: { color: '#8b6b52', font: { size: 11, family: 'Noto Serif KR' }, boxWidth: 10, padding: 10 }
+          }
+        }
+      }
+    });
+  }
+
+  function makeBarCustom(containerId, data, total) {
+    const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
+    if (!sorted.length) {
+      document.getElementById(containerId).innerHTML = '<div class="empty"><p>응답 없음</p></div>';
+      return;
+    }
+    document.getElementById(containerId).innerHTML = sorted.map(([label, count]) => {
+      const pct = total ? Math.round(count / total * 100) : 0;
+      const shortLabel = label.split('—')[0].trim();
+      const subLabel = label.includes('—') ? label.split('—')[1].trim() : '';
+      return `
+        <div class="bar-item">
+          <div class="bar-row">
+            <span>${shortLabel}${subLabel ? ' <span style="color:var(--muted);font-size:11px;">— ' + subLabel + '</span>' : ''}</span>
+            <span class="bar-pct">${count}명 · ${pct}%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+        </div>`;
+    }).join('');
+  }
+
+  function topKey(obj) {
+    if (!obj || !Object.keys(obj).length) return '—';
+    return Object.entries(obj).sort((a,b) => b[1]-a[1])[0][0];
+  }
+
+  function intensityBadge(val) {
+    if (!val) return '<span class="tag">—</span>';
+    if (val.includes('완전')) return `<span class="intensity-badge badge-1">😌 ${val.split('—')[0].trim()}</span>`;
+    if (val.includes('가볍게')) return `<span class="intensity-badge badge-2">🌤️ ${val.split('—')[0].trim()}</span>`;
+    if (val.includes('적당한')) return `<span class="intensity-badge badge-3">💦 ${val.split('—')[0].trim()}</span>`;
+    if (val.includes('확실한')) return `<span class="intensity-badge badge-4">🔥 ${val.split('—')[0].trim()}</span>`;
+    return `<span class="tag">${val}</span>`;
+  }
+
+  async function loadAll() {
+    document.getElementById('lastUpdate').textContent = '불러오는 중...';
+    try {
+      const [summary, responses] = await Promise.all([
+        fetch('/api/summary').then(r => r.json()),
+        fetch('/api/results').then(r => r.json())
+      ]);
+
+      // 통계 카드
+      document.getElementById('sTotal').textContent = summary.total || 0;
+      document.getElementById('sLevel').textContent = topKey(summary.level).split(' ')[0] || '—';
+      const topInt = topKey(summary.intensity);
+      document.getElementById('sIntensity').textContent = topInt !== '—' ? topInt.split('—')[0].trim() : '—';
+      document.getElementById('sGoal').textContent = topKey(summary.goals) || '—';
+      document.getElementById('lastUpdate').textContent = '업데이트 ' + new Date().toLocaleString('ko-KR');
+
+      if (summary.total > 0) {
+        // 차트
+        const levelKeys = Object.keys(summary.level || {});
+        const levelVals = Object.values(summary.level || {});
+        if (levelKeys.length) makeDonut('levelChart', levelKeys, levelVals);
+
+        const styleKeys = Object.keys(summary.style || {});
+        const styleVals = Object.values(summary.style || {});
+        if (styleKeys.length) makeDonut('styleChart', styleKeys, styleVals);
+
+        makeBarCustom('intensityBars', summary.intensity || {}, summary.total);
+        makeBarCustom('goalBars', summary.goals || {}, summary.total);
+      }
+
+      // 응답 목록
+      renderTable(responses);
+
+    } catch (e) {
+      document.getElementById('lastUpdate').textContent = '⚠️ 서버에 연결할 수 없습니다';
+    }
+  }
+
+  function renderTable(rows) {
+    document.getElementById('listCount').textContent = `총 ${rows.length}건`;
+    if (!rows.length) {
+      document.getElementById('tableWrap').innerHTML = `
+        <div class="empty"><div class="e-icon">📭</div><p>아직 응답이 없어요.</p></div>`;
+      return;
+    }
+    const tbody = rows.map(r => `
+      <tr>
+        <td style="color:var(--muted)">#${r.id}</td>
+        <td><strong>${r.name}</strong></td>
+        <td>${r.level ? `<span class="tag">${r.level}</span>` : '—'}</td>
+        <td style="max-width:160px">${r.style ? `<span class="tag">${r.style}</span>` : '—'}</td>
+        <td>${intensityBadge(r.intensity)}</td>
+        <td>${(r.goals||[]).map(g=>`<span class="tag">${g}</span>`).join('') || '—'}</td>
+        <td style="color:var(--muted);font-size:11px;max-width:140px">${r.comment || '—'}</td>
+        <td style="color:var(--muted);font-size:11px;white-space:nowrap">${r.submitted_at || '—'}</td>
+        <td><button class="del-btn" onclick="delRow(${r.id})">삭제</button></td>
+      </tr>`).join('');
+
+    document.getElementById('tableWrap').innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>이름</th><th>수준</th><th>스타일</th>
+            <th>강도</th><th>목표</th><th>의견</th><th>제출시간</th><th></th>
+          </tr>
+        </thead>
+        <tbody>${tbody}</tbody>
+      </table>`;
+  }
+
+  async function downloadCSV() {
+    const responses = await fetch('/api/results').then(r => r.json());
+    if (!responses.length) { alert('저장된 응답이 없어요.'); return; }
+
+    const headers = ['번호','이름','경험수준','수업스타일','희망강도','목표','특이사항','제출시간'];
+    const rows = responses.map(r => [
+      r.id,
+      r.name,
+      r.level,
+      r.style,
+      r.intensity?.split('—')[0].trim(),
+      (r.goals || []).join(' / '),
+      r.comment,
+      r.submitted_at
+    ].map(v => `"${(v || '').toString().replace(/"/g, '""')}"`));
+
+    const csv = '\uFEFF' + [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `요가설문결과_${new Date().toLocaleDateString('ko-KR').replace(/\. /g,'-').replace('.','')}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function delRow(id) {
+    if (!confirm(`응답 #${id}를 삭제할까요?`)) return;
+    await fetch(`/api/delete/${id}`, { method: 'DELETE' });
+    loadAll();
+  }
+
+  loadAll();
+  setInterval(loadAll, 30000);
+</script>
+</body>
+</html>
