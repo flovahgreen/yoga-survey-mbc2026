@@ -303,6 +303,7 @@
       <div style="display:flex;gap:8px">
         <button class="refresh-btn" onclick="loadAll()">↻ 새로고침</button>
         <button class="refresh-btn" onclick="downloadCSV()" style="background:var(--accent);color:#fdf8f2;border-color:var(--accent)">↓ CSV 저장</button>
+        <button class="refresh-btn" onclick="resetAll()" style="background:#fdf0ee;color:#a04040;border-color:#e8c0b8;">🗑 전체 초기화</button>
       </div>
     </div>
 
@@ -534,6 +535,12 @@
     a.download = `요가설문결과_${new Date().toLocaleDateString('ko-KR').replace(/\. /g,'-').replace('.','')}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function resetAll() {
+    if (!confirm('테스트 데이터를 포함한 모든 응답을 삭제할까요?\n이 작업은 되돌릴 수 없어요.')) return;
+    await fetch('/api/reset', { method: 'DELETE' });
+    loadAll();
   }
 
   async function delRow(id) {
