@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 import json
 import os
 from datetime import datetime
-import urllib.request
+import requests as req_lib
 
 app = Flask(__name__, static_folder='.')
 
@@ -11,13 +11,7 @@ GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jlQtXV2hWmR
 
 def send_to_google_sheet(data):
     try:
-        payload = json.dumps(data).encode('utf-8')
-        req = urllib.request.Request(
-            GOOGLE_SHEET_URL,
-            data=payload,
-            headers={'Content-Type': 'application/json'}
-        )
-        urllib.request.urlopen(req, timeout=5)
+        req_lib.post(GOOGLE_SHEET_URL, json=data, timeout=5)
     except Exception as e:
         print(f'[구글 시트 전송 실패] {e}')
 
