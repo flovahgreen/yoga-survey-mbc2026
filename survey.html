@@ -717,26 +717,21 @@
   }
 
   async function submitForm() {
-    const payload = {
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jlQtXV2hWmRAlTilbhrAXRBHrA-YmQiuaAEb_J-LdDndGcZYcNqrZ8iRSq/exec';
+    const params = new URLSearchParams({
+      action: 'submit',
       name: answers.name,
       level: answers.level,
       style: answers.style,
       intensity: answers.intensity,
-      goals: answers.goals,
-      comment: answers.comment
-    };
-
+      goals: answers.goals.join(','),
+      comment: answers.comment,
+      submitted_at: new Date().toLocaleString('ko-KR')
+    });
     try {
-      const res = await fetch('/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const result = await res.json();
-      if (!result.success) console.warn('서버 응답 오류');
-    } catch {
-      // 서버 미연결 시에도 완료 화면은 정상 표시
-      console.warn('서버 미연결 — 완료 화면만 표시합니다.');
+      await fetch(`${SHEET_URL}?${params}`, { mode: 'no-cors' });
+    } catch(e) {
+      console.warn('전송 실패:', e);
     }
     showDone();
   }
