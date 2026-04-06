@@ -71,6 +71,11 @@ def delete_response(response_id):
     save_responses(responses)
     return jsonify({'success': True})
 
+@app.route('/api/reset', methods=['DELETE'])
+def reset_all():
+    save_responses([])
+    return jsonify({'success': True})
+
 if __name__ == '__main__':
     print("\n🧘 MBC 경영센터 요가 설문 서버")
     print("━" * 35)
