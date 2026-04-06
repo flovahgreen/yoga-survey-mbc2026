@@ -288,7 +288,7 @@
       <span>📋</span><span>응답 목록</span>
     </button>
     <div class="sidebar-bottom">
-      <button class="nav-item" onclick="window.open('/', '_blank')">
+      <button class="nav-item" onclick="window.open('./survey.html', '_blank')">
         <span>🔗</span><span>설문 페이지</span>
       </button>
     </div>
@@ -368,6 +368,7 @@
 </div>
 
 <script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jlQtXV2hWmRAlTilbhrAXRBHrA-YmQiuaAEb_J-LdDndGcZYcNqrZ8iRSq/exec';
   const COLORS = ['#8b6b52','#c9a882','#d4b896','#e8d5be','#a0845c','#7a5c44','#bf9a76','#b08060'];
 
   Chart.defaults.color = '#9c8070';
@@ -445,8 +446,8 @@
     document.getElementById('lastUpdate').textContent = '불러오는 중...';
     try {
       const [summary, responses] = await Promise.all([
-        fetch('/api/summary').then(r => r.json()),
-        fetch('/api/results').then(r => r.json())
+        fetch(`${SHEET_URL}?action=summary`).then(r => r.json()),
+        fetch(`${SHEET_URL}?action=results`).then(r => r.json())
       ]);
 
       // 통계 카드
@@ -512,7 +513,7 @@
   }
 
   async function downloadCSV() {
-    const responses = await fetch('/api/results').then(r => r.json());
+    const responses = await fetch(`${SHEET_URL}?action=results`).then(r => r.json());
     if (!responses.length) { alert('저장된 응답이 없어요.'); return; }
 
     const headers = ['번호','이름','경험수준','수업스타일','희망강도','목표','특이사항','제출시간'];
@@ -539,13 +540,13 @@
 
   async function resetAll() {
     if (!confirm('테스트 데이터를 포함한 모든 응답을 삭제할까요?\n이 작업은 되돌릴 수 없어요.')) return;
-    await fetch('/api/reset', { method: 'DELETE' });
+    await fetch(`${SHEET_URL}?action=reset`);
     loadAll();
   }
 
   async function delRow(id) {
     if (!confirm(`응답 #${id}를 삭제할까요?`)) return;
-    await fetch(`/api/delete/${id}`, { method: 'DELETE' });
+    await fetch(`${SHEET_URL}?action=delete&id=${id}`);
     loadAll();
   }
 
