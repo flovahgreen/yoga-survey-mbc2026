@@ -2,10 +2,24 @@ from flask import Flask, request, jsonify, send_from_directory
 import json
 import os
 from datetime import datetime
+import urllib.request
 
 app = Flask(__name__, static_folder='.')
 
 DATA_FILE = 'responses.json'
+GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jlQtXV2hWmRAlTilbhrAXRBHrA-YmQiuaAEb_J-LdDndGcZYcNqrZ8iRSq/exec'
+
+def send_to_google_sheet(data):
+    try:
+        payload = json.dumps(data).encode('utf-8')
+        req = urllib.request.Request(
+            GOOGLE_SHEET_URL,
+            data=payload,
+            headers={'Content-Type': 'application/json'}
+        )
+        urllib.request.urlopen(req, timeout=5)
+    except Exception as e:
+        print(f'[구글 시트 전송 실패] {e}')
 
 def load_responses():
     if not os.path.exists(DATA_FILE):
@@ -35,6 +49,7 @@ def submit():
     data['id'] = len(responses) + 1
     responses.append(data)
     save_responses(responses)
+    send_to_google_sheet(data)
     return jsonify({'success': True, 'message': '설문이 성공적으로 제출되었습니다.'})
 
 @app.route('/api/results')
