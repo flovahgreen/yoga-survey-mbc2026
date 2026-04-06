@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 import json
 import os
 from datetime import datetime
+import urllib.parse
 import requests as req_lib
 
 app = Flask(__name__, static_folder='.')
@@ -11,17 +12,17 @@ GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jlQtXV2hWmR
 
 def send_to_google_sheet(data):
     try:
-        body = json.dumps(data).encode('utf-8')
-        headers = {'Content-Type': 'application/json'}
-
-        # 리다이렉트 없이 첫 요청
-        resp = req_lib.post(GOOGLE_SHEET_URL, data=body, headers=headers, allow_redirects=False, timeout=10)
-
-        # 리다이렉트 발생 시 수동으로 POST 유지하며 따라가기
-        if resp.status_code in (301, 302, 303, 307, 308) and 'Location' in resp.headers:
-            redirect_url = resp.headers['Location']
-            resp = req_lib.post(redirect_url, data=body, headers=headers, timeout=10)
-
+        params = {
+            'id': str(data.get('id', '')),
+            'submitted_at': data.get('submitted_at', ''),
+            'level': data.get('level', ''),
+            'style': data.get('style', ''),
+            'intensity': data.get('intensity', ''),
+            'goals': ','.join(data.get('goals', [])) if isinstance(data.get('goals'), list) else str(data.get('goals', '')),
+            'name': data.get('name', ''),
+        }
+        url = GOOGLE_SHEET_URL + '?' + urllib.parse.urlencode(params)
+        resp = req_lib.get(url, timeout=10)
         print(f'[구글 시트 전송 완료] 상태: {resp.status_code}')
     except Exception as e:
         print(f'[구글 시트 전송 실패] {e}')
@@ -66,15 +67,7 @@ def summary():
     responses = load_responses()
     if not responses:
         return jsonify({'total': 0})
-
-    out = {
-        'total': len(responses),
-        'level': {},
-        'style': {},
-        'intensity': {},
-        'goals': {},
-    }
-
+    out = {'total': len(responses), 'level': {}, 'style': {}, 'intensity': {}, 'goals': {}}
     for r in responses:
         for key in ('level', 'style', 'intensity'):
             val = r.get(key, '')
@@ -82,7 +75,6 @@ def summary():
                 out[key][val] = out[key].get(val, 0) + 1
         for g in r.get('goals', []):
             out['goals'][g] = out['goals'].get(g, 0) + 1
-
     return jsonify(out)
 
 @app.route('/api/delete/<int:response_id>', methods=['DELETE'])
