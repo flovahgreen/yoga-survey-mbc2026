@@ -11,7 +11,18 @@ GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jlQtXV2hWmR
 
 def send_to_google_sheet(data):
     try:
-        req_lib.post(GOOGLE_SHEET_URL, json=data, timeout=5)
+        body = json.dumps(data).encode('utf-8')
+        headers = {'Content-Type': 'application/json'}
+
+        # 리다이렉트 없이 첫 요청
+        resp = req_lib.post(GOOGLE_SHEET_URL, data=body, headers=headers, allow_redirects=False, timeout=10)
+
+        # 리다이렉트 발생 시 수동으로 POST 유지하며 따라가기
+        if resp.status_code in (301, 302, 303, 307, 308) and 'Location' in resp.headers:
+            redirect_url = resp.headers['Location']
+            resp = req_lib.post(redirect_url, data=body, headers=headers, timeout=10)
+
+        print(f'[구글 시트 전송 완료] 상태: {resp.status_code}')
     except Exception as e:
         print(f'[구글 시트 전송 실패] {e}')
 
@@ -88,7 +99,4 @@ def reset_all():
 if __name__ == '__main__':
     print("\n🧘 MBC 경영센터 요가 설문 서버")
     print("━" * 35)
-    print("📋 설문 페이지   →  http://localhost:5000")
-    print("📊 관리자 페이지 →  http://localhost:5000/admin")
-    print("━" * 35 + "\n")
     app.run(debug=True, port=5000)
