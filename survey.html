@@ -761,9 +761,23 @@
     if (e.key === 'Enter' && currentStep === 0) goNext();
   });
 
-  // 모바일 캐시 복원 시 초기화
-  window.addEventListener('pageshow', function(e) {
-    if (e.persisted) location.reload();
+  // 페이지 표시될 때마다 항상 초기화 (모바일 캐시 대응)
+  window.addEventListener('pageshow', function() {
+    document.querySelectorAll('.option.selected').forEach(el => el.classList.remove('selected'));
+    document.getElementById('input-name').value = '';
+    document.getElementById('input-comment').value = '';
+    answers.name = ''; answers.level = ''; answers.style = '';
+    answers.intensity = ''; answers.goals = []; answers.comment = '';
+    document.querySelectorAll('.slide').forEach((slide, i) => {
+      slide.classList.remove('current', 'prev', 'next');
+      slide.classList.add(i === 0 ? 'current' : 'next');
+    });
+    currentStep = 0;
+    document.getElementById('doneScreen').classList.remove('show');
+    document.getElementById('slidesWrap').style.display = '';
+    document.getElementById('footer').style.display = '';
+    updateHeader();
+    updateNextBtn();
   });
 </script>
 </body>
