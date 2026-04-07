@@ -760,6 +760,11 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && currentStep === 0) goNext();
   });
+
+  // 모바일 캐시 복원 시 초기화
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) location.reload();
+  });
 </script>
 </body>
 </html>
