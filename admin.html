@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>점심 요가 설문 관리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#FAF6F1;
+--card:#FFFFFF;
+--text:#3D3530;
+--sub:#A89F97;
+--accent:#C4856A;
+--accent-light:#F5E6DE;
+--accent-dark:#A86B52;
+--border:#EDE6DF;
+--pill-bg:#F3EDE7;
+--radius:16px;
+}
+html,body{
+min-height:100%;
+font-family:'Noto Sans KR',sans-serif;
+background:linear-gradient(180deg, #FDF9F5 0%, #F5EDE4 40%, #EFE4D9 100%);
+background-attachment:fixed;
+color:var(--text);
+-webkit-font-smoothing:antialiased;
+}
+
+/* 로그인 */
+.login-wrap{
+min-height:100vh;display:flex;
+align-items:center;justify-content:center;
+padding:20px;
+}
+.login-box{
+background:var(--card);
+border-radius:var(--radius);
+padding:40px 36px;
+width:100%;max-width:380px;
+text-align:center;
+box-shadow:0 2px 12px rgba(60,40,30,0.06);
+}
+.login-ico{
+width:64px;height:64px;border-radius:50%;
+background:var(--accent-light);
+display:flex;align-items:center;justify-content:center;
+font-size:28px;margin:0 auto 20px;
+}
+.login-t{
+font-family:'Noto Serif KR',serif;
+font-size:20px;font-weight:600;margin-bottom:8px;
+}
+.login-s{font-size:13px;color:var(--sub);margin-bottom:24px}
+.login-input{
+width:100%;padding:14px 18px;
+border:1.5px solid var(--border);border-radius:12px;
+font-family:inherit;font-size:15px;
+color:var(--text);outline:none;
+transition:border-color 0.2s;
+text-align:center;
+letter-spacing:4px;
+}
+.login-input:focus{border-color:var(--accent)}
+.login-input::placeholder{letter-spacing:0;color:#C8BFB7}
+.login-btn{
+width:100%;padding:14px;margin-top:14px;
+border:none;border-radius:12px;
+background:var(--accent);color:#fff;
+font-family:inherit;font-size:15px;font-weight:600;
+cursor:pointer;transition:background 0.2s;
+}
+.login-btn:hover{background:var(--accent-dark)}
+.login-err{
+font-size:13px;color:#D4544C;margin-top:12px;
+display:none;
+}
+
+/* 대시보드 */
+.dash{display:none;max-width:960px;margin:0 auto;padding:24px 20px 40px}
+.dash-hdr{
+display:flex;align-items:center;justify-content:space-between;
+margin-bottom:28px;flex-wrap:wrap;gap:12px;
+}
+.dash-t{
+font-family:'Noto Serif KR',serif;
+font-size:22px;font-weight:600;
+}
+.dash-meta{font-size:13px;color:var(--sub)}
+.dash-logout{
+padding:8px 16px;border:1.5px solid var(--border);
+border-radius:10px;background:var(--card);
+font-family:inherit;font-size:13px;color:var(--sub);
+cursor:pointer;transition:all 0.2s;
+}
+.dash-logout:hover{border-color:var(--accent);color:var(--accent)}
+
+/* 탭 */
+.tabs{
+display:flex;gap:4px;
+background:var(--pill-bg);
+border-radius:12px;padding:4px;
+margin-bottom:24px;width:fit-content;
+}
+.tab-btn{
+padding:8px 20px;border:none;border-radius:10px;
+background:transparent;font-family:inherit;
+font-size:14px;font-weight:500;color:var(--sub);
+cursor:pointer;transition:all 0.2s;
+}
+.tab-btn.on{
+background:var(--card);color:var(--text);
+box-shadow:0 1px 4px rgba(60,40,30,0.08);
+}
+
+/* 통계 카드 그리드 */
+.stats-row{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:12px;margin-bottom:28px;
+}
+.stat-card{
+background:var(--card);
+border-radius:var(--radius);
+padding:18px 20px;
+box-shadow:0 1px 3px rgba(60,40,30,0.04);
+}
+.stat-label{font-size:12px;color:var(--sub);margin-bottom:6px}
+.stat-value{font-size:26px;font-weight:600;color:var(--text)}
+
+/* 차트 영역 */
+.chart-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;margin-bottom:28px;
+}
+.chart-card{
+background:var(--card);
+border-radius:var(--radius);
+padding:24px;
+box-shadow:0 1px 3px rgba(60,40,30,0.04);
+}
+.chart-title{
+font-size:14px;font-weight:600;
+margin-bottom:16px;color:var(--text);
+}
+.chart-wrap{position:relative;width:100%;max-height:260px}
+
+/* 테이블 */
+.tbl-wrap{
+background:var(--card);
+border-radius:var(--radius);
+overflow:hidden;
+box-shadow:0 1px 3px rgba(60,40,30,0.04);
+}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:var(--pill-bg)}
+th{
+padding:12px 16px;text-align:left;
+font-weight:500;color:var(--sub);
+white-space:nowrap;font-size:12px;
+letter-spacing:0.3px;
+border-bottom:1px solid var(--border);
+}
+td{
+padding:12px 16px;
+border-bottom:1px solid var(--border);
+color:var(--text);
+max-width:200px;
+overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--pill-bg)}
+.empty-msg{
+padding:60px 20px;text-align:center;
+color:var(--sub);font-size:14px;
+}
+
+/* 로딩 */
+.loading{
+text-align:center;padding:60px 20px;
+color:var(--sub);font-size:14px;
+}
+
+/* 패널 */
+.panel{display:none}
+.panel.on{display:block}
+
+/* 새로고침 버튼 */
+.refresh-btn{
+padding:8px 16px;border:1.5px solid var(--border);
+border-radius:10px;background:var(--card);
+font-family:inherit;font-size:13px;color:var(--sub);
+cursor:pointer;transition:all 0.2s;
+}
+.refresh-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+@media(max-width:600px){
+.dash{padding:16px 14px 32px}
+.dash-t{font-size:19px}
+.chart-grid{grid-template-columns:1fr}
+.stats-row{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- 로그인 -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-ico">🔒</div>
+    <div class="login-t">관리자 로그인</div>
+    <div class="login-s">설문 결과를 확인하려면 비밀번호를 입력하세요</div>
+    <input class="login-input" id="pwInput" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
+    <button class="login-btn" onclick="tryLogin()">로그인</button>
+    <div class="login-err" id="loginErr">비밀번호가 올바르지 않습니다</div>
+  </div>
+</div>
+
+<!-- 대시보드 -->
+<div class="dash" id="dash">
+  <div class="dash-hdr">
+    <div>
+      <div class="dash-t">점심 요가 설문 결과</div>
+      <div class="dash-meta" id="metaText">불러오는 중...</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="refresh-btn" onclick="loadData()">↻ 새로고침</button>
+      <button class="dash-logout" onclick="logout()">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn on" onclick="switchTab('stats',this)">통계</button>
+    <button class="tab-btn" onclick="switchTab('list',this)">응답 목록</button>
+  </div>
+
+  <!-- 통계 패널 -->
+  <div class="panel on" id="panelStats">
+    <div class="stats-row" id="statsRow"></div>
+    <div class="chart-grid" id="chartGrid"></div>
+  </div>
+
+  <!-- 목록 패널 -->
+  <div class="panel" id="panelList">
+    <div class="tbl-wrap">
+      <div class="tbl-scroll" id="tblArea">
+        <div class="loading">데이터를 불러오는 중...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jIQtXV2hWmRAlTiIbhrAXRBHrA-YmQiuaAEb_J-LdDndGcZYcNqrZ8iRSq/exec';
+var PASSWORD = 'yoga2026';
+var rows = [];
+var charts = [];
+
+function tryLogin(){
+  var pw = document.getElementById('pwInput').value;
+  if(pw === PASSWORD){
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('dash').style.display='block';
+    loadData();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+    document.getElementById('pwInput').value='';
+  }
+}
+
+function logout(){
+  document.getElementById('dash').style.display='none';
+  document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('pwInput').value='';
+  document.getElementById('loginErr').style.display='none';
+}
+
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  document.getElementById('panelStats').classList.toggle('on', tab==='stats');
+  document.getElementById('panelList').classList.toggle('on', tab==='list');
+}
+
+function loadData(){
+  document.getElementById('tblArea').innerHTML='<div class="loading">데이터를 불러오는 중...</div>';
+  document.getElementById('metaText').textContent='불러오는 중...';
+
+  fetch(SHEET_URL)
+    .then(function(r){return r.json()})
+    .then(function(data){
+      rows = data;
+      renderMeta();
+      renderTable();
+      renderStats();
+      renderCharts();
+    })
+    .catch(function(){
+      document.getElementById('tblArea').innerHTML='<div class="empty-msg">데이터를 불러오지 못했습니다</div>';
+    });
+}
+
+function renderMeta(){
+  var total = rows.length;
+  var txt = '총 ' + total + '명 응답';
+  if(total > 0){
+    var last = rows[total-1]['제출시간'];
+    if(last){
+      var d = new Date(last);
+      txt += '  ·  마지막 응답: ' + d.toLocaleDateString('ko-KR');
+    }
+  }
+  document.getElementById('metaText').textContent = txt;
+}
+
+function renderTable(){
+  if(rows.length === 0){
+    document.getElementById('tblArea').innerHTML='<div class="empty-msg">아직 응답이 없습니다</div>';
+    return;
+  }
+  var cols = ['제출시간','언어','요가경험','선호강도','업무복귀 걱정','집중부위','주의사항','자유의견'];
+  var h = '<table><thead><tr>';
+  h += '<th>#</th>';
+  for(var i=0;i<cols.length;i++) h+='<th>'+cols[i]+'</th>';
+  h += '</tr></thead><tbody>';
+  for(var j=rows.length-1;j>=0;j--){
+    var r = rows[j];
+    h += '<tr><td>'+(j+1)+'</td>';
+    for(var k=0;k<cols.length;k++){
+      var val = r[cols[k]] || '';
+      if(cols[k]==='제출시간' && val){
+        var d = new Date(val);
+        val = d.toLocaleDateString('ko-KR') + ' ' + d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+      }
+      h += '<td title="'+String(val).replace(/"/g,'&quot;')+'">'+val+'</td>';
+    }
+    h += '</tr>';
+  }
+  h += '</tbody></table>';
+  document.getElementById('tblArea').innerHTML = h;
+}
+
+function renderStats(){
+  var total = rows.length;
+  var koCount = 0, enCount = 0;
+  for(var i=0;i<rows.length;i++){
+    if(rows[i]['언어']==='en') enCount++; else koCount++;
+  }
+  var html = '';
+  html += '<div class="stat-card"><div class="stat-label">총 응답</div><div class="stat-value">'+total+'</div></div>';
+  html += '<div class="stat-card"><div class="stat-label">한국어 응답</div><div class="stat-value">'+koCount+'</div></div>';
+  html += '<div class="stat-card"><div class="stat-label">English 응답</div><div class="stat-value">'+enCount+'</div></div>';
+  document.getElementById('statsRow').innerHTML = html;
+}
+
+function countField(field){
+  var counts = {};
+  for(var i=0;i<rows.length;i++){
+    var val = rows[i][field];
+    if(!val) continue;
+    var items = String(val).split(', ');
+    for(var j=0;j<items.length;j++){
+      var item = items[j].trim();
+      if(item){
+        counts[item] = (counts[item]||0) + 1;
+      }
+    }
+  }
+  return counts;
+}
+
+var palette = [
+  'rgba(196,133,106,0.8)',
+  'rgba(168,107,82,0.8)',
+  'rgba(139,90,66,0.8)',
+  'rgba(215,166,145,0.8)',
+  'rgba(180,140,120,0.8)',
+  'rgba(160,120,100,0.8)',
+  'rgba(200,175,155,0.8)'
+];
+var paletteBorder = [
+  '#C4856A','#A86B52','#8B5A42',
+  '#D7A691','#B48C78','#A07864','#C8AF9B'
+];
+
+function renderCharts(){
+  for(var c=0;c<charts.length;c++){charts[c].destroy();}
+  charts = [];
+
+  var fields = [
+    {key:'요가경험', title:'요가 경험', type:'doughnut'},
+    {key:'선호강도', title:'선호 강도', type:'doughnut'},
+    {key:'업무복귀 걱정', title:'업무 복귀 시 걱정', type:'bar'},
+    {key:'집중부위', title:'집중 부위 (복수)', type:'bar'},
+    {key:'주의사항', title:'주의 사항 (복수)', type:'bar'}
+  ];
+
+  var grid = document.getElementById('chartGrid');
+  grid.innerHTML = '';
+
+  if(rows.length === 0){
+    grid.innerHTML = '<div class="empty-msg">차트를 표시할 데이터가 없습니다</div>';
+    return;
+  }
+
+  for(var f=0;f<fields.length;f++){
+    var fi = fields[f];
+    var counts = countField(fi.key);
+    var labels = Object.keys(counts);
+    var values = [];
+    for(var l=0;l<labels.length;l++) values.push(counts[labels[l]]);
+
+    if(labels.length === 0) continue;
+
+    var card = document.createElement('div');
+    card.className = 'chart-card';
+    card.innerHTML = '<div class="chart-title">'+fi.title+'</div><div class="chart-wrap"><canvas id="chart-'+f+'"></canvas></div>';
+    grid.appendChild(card);
+
+    var ctx = document.getElementById('chart-'+f).getContext('2d');
+    var cfg;
+
+    if(fi.type === 'doughnut'){
+      cfg = {
+        type:'doughnut',
+        data:{
+          labels:labels,
+          datasets:[{
+            data:values,
+            backgroundColor:palette.slice(0,labels.length),
+            borderColor:paletteBorder.slice(0,labels.length),
+            borderWidth:1.5
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:true,
+          plugins:{
+            legend:{position:'bottom',labels:{font:{family:'Noto Sans KR',size:12},padding:14,usePointStyle:true,pointStyleWidth:8}}
+          }
+        }
+      };
+    } else {
+      cfg = {
+        type:'bar',
+        data:{
+          labels:labels,
+          datasets:[{
+            data:values,
+            backgroundColor:'rgba(196,133,106,0.65)',
+            borderColor:'#C4856A',
+            borderWidth:1.5,
+            borderRadius:6,
+            barThickness:32
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:true,
+          indexAxis:'y',
+          plugins:{legend:{display:false}},
+          scales:{
+            x:{
+              beginAtZero:true,
+              ticks:{stepSize:1,font:{family:'Noto Sans KR',size:11}},
+              grid:{color:'rgba(0,0,0,0.04)'}
+            },
+            y:{
+              ticks:{font:{family:'Noto Sans KR',size:12}},
+              grid:{display:false}
+            }
+          }
+        }
+      };
+    }
+
+    charts.push(new Chart(ctx, cfg));
+  }
+}
+</script>
+</body>
+</html>
