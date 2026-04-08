@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>점심 요가 설문조사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#FAF6F1;
+--card:#FFFFFF;
+--text:#3D3530;
+--sub:#A89F97;
+--accent:#C4856A;
+--accent-light:#F5E6DE;
+--accent-dark:#A86B52;
+--accent-deep:#8B5A42;
+--border:#EDE6DF;
+--pill-bg:#F3EDE7;
+--opt-hover:#F8F2EC;
+--opt-sel:#F5E6DE;
+--opt-sel-border:#C4856A;
+--radius:18px;
+}
+html,body{
+min-height:100%;
+font-family:'Noto Sans KR',sans-serif;
+background:linear-gradient(180deg, #FDF9F5 0%, #F5EDE4 40%, #EFE4D9 100%);
+background-attachment:fixed;
+color:var(--text);
+-webkit-font-smoothing:antialiased;
+}
+body{display:flex;flex-direction:column;align-items:center}
+
+.wrap{
+width:100%;max-width:460px;
+min-height:100vh;min-height:100dvh;
+display:flex;flex-direction:column;
+}
+
+.hdr{
+padding:16px 20px 0;
+display:flex;align-items:center;gap:12px;
+flex-shrink:0;
+}
+.hdr.off{display:none}
+.hdr-back{
+width:38px;height:38px;border:none;background:none;
+cursor:pointer;display:flex;align-items:center;justify-content:center;
+border-radius:50%;transition:background 0.25s;color:var(--text);
+}
+.hdr-back:hover{background:var(--border)}
+.hdr-back svg{width:20px;height:20px}
+
+.prog{padding:14px 24px 0;flex-shrink:0}
+.prog.off{display:none}
+.prog-bar{width:100%;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:0;background:var(--accent);border-radius:2px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+.prog-txt{font-size:12px;color:var(--sub);margin-top:8px;letter-spacing:0.5px}
+
+.vp{flex:1;display:flex;flex-direction:column}
+.sl{display:none;padding:40px 28px 24px;flex-direction:column}
+.sl.on{display:flex}
+.sl.on[data-i="0"],.sl.on[data-i="7"]{flex:1}
+
+.q-t{
+font-family:'Noto Serif KR',serif;
+font-size:22px;font-weight:600;line-height:1.55;
+margin-bottom:10px;letter-spacing:-0.3px;
+color:var(--text);
+}
+.q-d{font-size:13.5px;color:var(--sub);margin-bottom:30px;line-height:1.65;letter-spacing:0.1px}
+
+.opts{display:flex;flex-direction:column;gap:11px}
+.ob{
+width:100%;padding:15px 18px;
+border:1.5px solid var(--border);border-radius:var(--radius);
+background:var(--card);font-family:inherit;font-size:15px;
+color:var(--text);text-align:left;cursor:pointer;
+display:flex;align-items:center;gap:15px;line-height:1.4;
+transition:border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+box-shadow:0 1px 2px rgba(60,40,30,0.03);
+}
+.ob:active{transform:scale(0.98)}
+@media(hover:hover){.ob:hover{border-color:#D9CFC6;background:var(--opt-hover)}}
+.ob.sel{
+border-color:var(--opt-sel-border);
+background:var(--opt-sel);
+box-shadow:0 2px 8px rgba(196,133,106,0.12);
+}
+.ob-ico{
+width:44px;height:44px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+font-size:20px;flex-shrink:0;
+background:var(--pill-bg);
+transition:background-color 0.2s;
+}
+.ob.sel .ob-ico{background:var(--accent-light)}
+.ob-t{font-size:14.5px;font-weight:500;letter-spacing:-0.1px}
+.ob-s{font-size:12px;color:var(--sub);font-weight:300;margin-top:3px;letter-spacing:0.1px}
+
+.multi-tag{
+display:inline-block;font-size:11.5px;color:var(--accent-deep);
+background:var(--accent-light);padding:5px 12px;
+border-radius:20px;margin-bottom:18px;font-weight:500;
+letter-spacing:0.3px;
+}
+
+.ta{
+width:100%;padding:18px 20px;margin-top:4px;
+border:1.5px solid var(--border);border-radius:var(--radius);
+background:var(--card);font-family:inherit;font-size:14.5px;
+color:var(--text);outline:none;transition:border-color 0.25s;
+resize:none;min-height:130px;line-height:1.7;
+box-shadow:0 1px 2px rgba(60,40,30,0.03);
+}
+.ta::placeholder{color:#C8BFB7}
+.ta:focus{border-color:var(--accent)}
+
+.bot{padding:16px 28px;padding-bottom:max(16px,env(safe-area-inset-bottom));flex-shrink:0}
+.nb{
+width:100%;padding:16px;border:none;border-radius:var(--radius);
+background:var(--accent);color:#fff;font-family:inherit;
+font-size:15.5px;font-weight:600;cursor:pointer;
+transition:background 0.25s;letter-spacing:0.2px;
+box-shadow:0 2px 10px rgba(196,133,106,0.2);
+}
+.nb:hover{background:var(--accent-dark)}
+.nb:active{transform:scale(0.98)}
+.nb:disabled{background:#CFC6BF;cursor:not-allowed;transform:none;box-shadow:none}
+.nb.off{display:none}
+
+/* 언어 토글 */
+.lang-toggle{
+display:flex;
+background:var(--pill-bg);
+border-radius:20px;
+padding:3px;
+margin-top:20px;
+width:fit-content;
+}
+.lang-btn{
+padding:6px 18px;
+border:none;border-radius:17px;
+background:transparent;
+font-family:inherit;font-size:13px;font-weight:500;
+color:var(--sub);
+cursor:pointer;
+transition:all 0.25s;
+letter-spacing:0.3px;
+}
+.lang-btn.active{
+background:var(--card);
+color:var(--text);
+box-shadow:0 1px 4px rgba(60,40,30,0.08);
+}
+
+.intro{
+flex:1;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+text-align:center;gap:16px;
+min-height:380px;
+}
+.intro-ico{
+width:84px;height:84px;border-radius:50%;
+background:var(--accent-light);
+display:flex;align-items:center;justify-content:center;
+font-size:38px;margin-bottom:4px;
+box-shadow:0 4px 16px rgba(196,133,106,0.12);
+}
+.intro-t{
+font-family:'Noto Serif KR',serif;
+font-size:24px;font-weight:600;letter-spacing:-0.5px;line-height:1.5;
+color:var(--text);
+}
+.intro-s{font-size:14px;color:var(--sub);line-height:1.7;max-width:260px;font-weight:300;letter-spacing:0.2px}
+.intro-pill{
+font-size:12.5px;color:var(--sub);
+background:var(--pill-bg);padding:7px 16px;
+border-radius:20px;margin-top:4px;
+letter-spacing:0.3px;
+}
+
+.done{
+flex:1;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+text-align:center;gap:16px;
+min-height:380px;
+}
+.done-chk{
+width:72px;height:72px;border-radius:50%;
+background:var(--accent-light);
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 4px 16px rgba(196,133,106,0.12);
+}
+.done-chk svg{width:34px;height:34px;color:var(--accent)}
+.done-t{
+font-family:'Noto Serif KR',serif;
+font-size:22px;font-weight:600;letter-spacing:-0.3px;
+}
+.done-s{font-size:14px;color:var(--sub);line-height:1.7;max-width:260px;font-weight:300}
+
+@media(max-width:480px){
+.q-t{font-size:20px}
+.sl{padding:32px 22px 20px}
+.bot{padding:16px 22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr off" id="hdr">
+    <button class="hdr-back" onclick="back()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+  </div>
+  <div class="prog off" id="prog">
+    <div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+    <div class="prog-txt" id="pt"></div>
+  </div>
+
+  <div class="vp" id="vp">
+
+    <div class="sl on" data-i="0">
+      <div class="intro">
+        <div class="intro-ico">🧘‍♀️</div>
+        <div class="intro-t" data-ko="점심 요가 수업<br>설문조사" data-en="Lunchtime Yoga<br>Survey">점심 요가 수업<br>설문조사</div>
+        <div class="intro-s" data-ko="여러분이 원하는 수업 강도를<br>미리 파악하려고 해요" data-en="Help us understand your<br>preferred class intensity">여러분이 원하는 수업 강도를<br>미리 파악하려고 해요</div>
+        <div class="intro-pill" data-ko="⏱ 약 1분 소요" data-en="⏱ About 1 min">⏱ 약 1분 소요</div>
+        <div class="lang-toggle">
+          <button class="lang-btn active" onclick="setLang('ko')">한국어</button>
+          <button class="lang-btn" onclick="setLang('en')">English</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sl" data-i="1" data-key="exp" data-type="single">
+      <div class="q-t" data-ko="요가 경험이 어느 정도이신가요?" data-en="How much yoga experience do you have?">요가 경험이 어느 정도이신가요?</div>
+      <div class="q-d" data-ko="수업 난이도를 조절하는 데 참고할게요." data-en="This helps us adjust the class difficulty.">수업 난이도를 조절하는 데 참고할게요.</div>
+      <div class="opts">
+        <button class="ob" data-idx="0" onclick="pick(this)"><div class="ob-ico">🌱</div><div><div class="ob-t" data-ko="처음이에요" data-en="First time">처음이에요</div><div class="ob-s" data-ko="요가를 거의 해본 적 없어요" data-en="I've barely tried yoga before">요가를 거의 해본 적 없어요</div></div></button>
+        <button class="ob" data-idx="1" onclick="pick(this)"><div class="ob-ico">🌿</div><div><div class="ob-t" data-ko="가끔 해봤어요" data-en="Tried a few times">가끔 해봤어요</div><div class="ob-s" data-ko="유튜브나 앱으로 몇 번 따라해봤어요" data-en="Followed along on YouTube or apps">유튜브나 앱으로 몇 번 따라해봤어요</div></div></button>
+        <button class="ob" data-idx="2" onclick="pick(this)"><div class="ob-ico">🌳</div><div><div class="ob-t" data-ko="꾸준히 하고 있어요" data-en="Practicing regularly">꾸준히 하고 있어요</div><div class="ob-s" data-ko="정기적으로 수련 중이에요" data-en="I practice on a regular basis">정기적으로 수련 중이에요</div></div></button>
+      </div>
+    </div>
+
+    <div class="sl" data-i="2" data-key="intensity" data-type="single">
+      <div class="q-t" data-ko="점심 요가, 어떤 강도가<br>좋으신가요?" data-en="What intensity do you<br>prefer for lunchtime yoga?">점심 요가, 어떤 강도가<br>좋으신가요?</div>
+      <div class="q-d" data-ko="오후 업무 복귀를 고려해서 골라주세요." data-en="Keep in mind you'll be heading back to work.">오후 업무 복귀를 고려해서 골라주세요.</div>
+      <div class="opts">
+        <button class="ob" data-idx="0" onclick="pick(this)"><div class="ob-ico">😌</div><div><div class="ob-t" data-ko="가볍게 스트레칭 위주" data-en="Light stretching">가볍게 스트레칭 위주</div><div class="ob-s" data-ko="거의 땀 안 나는 정도, 릴랙스 중심" data-en="Barely any sweat, relaxation focused">거의 땀 안 나는 정도, 릴랙스 중심</div></div></button>
+        <button class="ob" data-idx="1" onclick="pick(this)"><div class="ob-ico">🙂</div><div><div class="ob-t" data-ko="적당히 움직이기" data-en="Moderate movement">적당히 움직이기</div><div class="ob-s" data-ko="살짝 땀나는 정도, 개운함 위주" data-en="Light sweat, feeling refreshed">살짝 땀나는 정도, 개운함 위주</div></div></button>
+        <button class="ob" data-idx="2" onclick="pick(this)"><div class="ob-ico">💪</div><div><div class="ob-t" data-ko="좀 강하게 해도 괜찮아요" data-en="I'm okay with intense">좀 강하게 해도 괜찮아요</div><div class="ob-s" data-ko="확실히 운동한 느낌이 나면 좋겠어요" data-en="I want to feel like I got a real workout">확실히 운동한 느낌이 나면 좋겠어요</div></div></button>
+      </div>
+    </div>
+
+    <div class="sl" data-i="3" data-key="afterwork" data-type="single">
+      <div class="q-t" data-ko="수업 후 바로 업무 복귀할 때<br>가장 신경 쓰이는 건?" data-en="What concerns you most about<br>going back to work after class?">수업 후 바로 업무 복귀할 때<br>가장 신경 쓰이는 건?</div>
+      <div class="q-d" data-ko="수업 구성에 직접 반영할게요." data-en="We'll factor this into class planning.">수업 구성에 직접 반영할게요.</div>
+      <div class="opts">
+        <button class="ob" data-idx="0" onclick="pick(this)"><div class="ob-ico">😴</div><div><div class="ob-t" data-ko="너무 나른해지는 것" data-en="Feeling too drowsy">너무 나른해지는 것</div><div class="ob-s" data-ko="오후에 졸릴까 봐 걱정돼요" data-en="Worried I might feel sleepy in the afternoon">오후에 졸릴까 봐 걱정돼요</div></div></button>
+        <button class="ob" data-idx="1" onclick="pick(this)"><div class="ob-ico">⏰</div><div><div class="ob-t" data-ko="시간이 빠듯한 것" data-en="Tight schedule">시간이 빠듯한 것</div><div class="ob-s" data-ko="점심 식사 시간이 촉박해요" data-en="Not enough time for lunch">점심 식사 시간이 촉박해요</div></div></button>
+        <button class="ob" data-idx="2" onclick="pick(this)"><div class="ob-ico">💦</div><div><div class="ob-t" data-ko="땀이 많이 나는 것" data-en="Sweating too much">땀이 많이 나는 것</div><div class="ob-s" data-ko="씻을 시간이 부족해서 걱정돼요" data-en="Not enough time to freshen up">씻을 시간이 부족해서 걱정돼요</div></div></button>
+        <button class="ob" data-idx="3" onclick="pick(this)"><div class="ob-ico">🙆</div><div><div class="ob-t" data-ko="별로 신경 쓰이지 않아요" data-en="Not really concerned">별로 신경 쓰이지 않아요</div><div class="ob-s" data-ko="괜찮아요, 편하게 해주세요" data-en="I'm fine, just go for it">괜찮아요, 편하게 해주세요</div></div></button>
+      </div>
+    </div>
+
+    <div class="sl" data-i="4" data-key="focus" data-type="multi">
+      <div class="q-t" data-ko="수업에서 특히 다뤄줬으면<br>하는 부위가 있나요?" data-en="Any areas you'd like<br>the class to focus on?">수업에서 특히 다뤄줬으면<br>하는 부위가 있나요?</div>
+      <div class="q-d" data-ko="복수 선택이 가능해요." data-en="You can select multiple.">복수 선택이 가능해요.</div>
+      <div class="multi-tag" data-ko="복수 선택 가능" data-en="Select multiple">복수 선택 가능</div>
+      <div class="opts">
+        <button class="ob" data-idx="0" onclick="pick(this)"><div class="ob-ico">🖥️</div><div><div class="ob-t" data-ko="목/어깨" data-en="Neck / Shoulders">목/어깨</div><div class="ob-s" data-ko="모니터 앞에 오래 앉아 있어서" data-en="From sitting at a monitor all day">모니터 앞에 오래 앉아 있어서</div></div></button>
+        <button class="ob" data-idx="1" onclick="pick(this)"><div class="ob-ico">🪑</div><div><div class="ob-t" data-ko="허리/골반" data-en="Lower back / Hips">허리/골반</div><div class="ob-s" data-ko="오래 앉아있으면 뻣뻣해져요" data-en="Gets stiff from sitting too long">오래 앉아있으면 뻣뻣해져요</div></div></button>
+        <button class="ob" data-idx="2" onclick="pick(this)"><div class="ob-ico">🦵</div><div><div class="ob-t" data-ko="하체/다리" data-en="Legs">하체/다리</div><div class="ob-s" data-ko="하체 순환이 잘 안 되는 느낌" data-en="Poor circulation in the lower body">하체 순환이 잘 안 되는 느낌</div></div></button>
+        <button class="ob" data-idx="3" onclick="pick(this)"><div class="ob-ico">🤲</div><div><div class="ob-t" data-ko="손목/손" data-en="Wrists / Hands">손목/손</div><div class="ob-s" data-ko="타이핑을 많이 해서 피로해요" data-en="Fatigued from typing a lot">타이핑을 많이 해서 피로해요</div></div></button>
+        <button class="ob" data-idx="4" onclick="pick(this)"><div class="ob-ico">🧘</div><div><div class="ob-t" data-ko="전신 골고루" data-en="Full body, evenly">전신 골고루</div><div class="ob-s" data-ko="특정 부위보다 전체적으로" data-en="Overall rather than specific areas">특정 부위보다 전체적으로</div></div></button>
+      </div>
+    </div>
+
+    <div class="sl" data-i="5" data-key="concern" data-type="multi">
+      <div class="q-t" data-ko="수업 중 주의가 필요한<br>부분이 있으신가요?" data-en="Anything we should be<br>careful about during class?">수업 중 주의가 필요한<br>부분이 있으신가요?</div>
+      <div class="q-d" data-ko="안전한 수업을 위해 미리 알려주세요." data-en="Please let us know for a safe class.">안전한 수업을 위해 미리 알려주세요.</div>
+      <div class="multi-tag" data-ko="복수 선택 가능" data-en="Select multiple">복수 선택 가능</div>
+      <div class="opts">
+        <button class="ob" data-idx="0" onclick="pick(this)"><div class="ob-ico">🦴</div><div><div class="ob-t" data-ko="디스크/허리 질환" data-en="Disc / Back issues">디스크/허리 질환</div></div></button>
+        <button class="ob" data-idx="1" onclick="pick(this)"><div class="ob-ico">🦵</div><div><div class="ob-t" data-ko="무릎 통증" data-en="Knee pain">무릎 통증</div></div></button>
+        <button class="ob" data-idx="2" onclick="pick(this)"><div class="ob-ico">💆</div><div><div class="ob-t" data-ko="목 통증" data-en="Neck pain">목 통증</div></div></button>
+        <button class="ob" data-idx="3" onclick="pick(this)"><div class="ob-ico">🤰</div><div><div class="ob-t" data-ko="임신 중" data-en="Pregnant">임신 중</div></div></button>
+        <button class="ob" data-idx="4" onclick="pick(this)"><div class="ob-ico">✅</div><div><div class="ob-t" data-ko="특별히 없어요" data-en="Nothing in particular">특별히 없어요</div></div></button>
+      </div>
+    </div>
+
+    <div class="sl" data-i="6" data-key="freetext" data-type="text">
+      <div class="q-t" data-ko="추가로 전달하고 싶은<br>이야기가 있으신가요?" data-en="Anything else you'd like<br>to share?">추가로 전달하고 싶은<br>이야기가 있으신가요?</div>
+      <div class="q-d" data-ko="수업에 대한 기대, 요청 사항 등 자유롭게 적어주세요.<br>없으면 건너뛰셔도 돼요!" data-en="Feel free to share any expectations or requests.<br>You can skip this if there's nothing!">수업에 대한 기대, 요청 사항 등 자유롭게 적어주세요.<br>없으면 건너뛰셔도 돼요!</div>
+      <textarea class="ta" id="ta" data-ph-ko="자유롭게 작성해주세요..." data-ph-en="Write anything you'd like..." placeholder="자유롭게 작성해주세요..." oninput="onTa()"></textarea>
+    </div>
+
+    <div class="sl" data-i="7">
+      <div class="done">
+        <div class="done-chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="done-t" data-ko="설문 완료!" data-en="All done!">설문 완료!</div>
+        <div class="done-s" data-ko="응답 감사합니다 🙏<br>수업 준비할 때 참고할게요" data-en="Thank you for your response 🙏<br>We'll keep this in mind for class">응답 감사합니다 🙏<br>수업 준비할 때 참고할게요</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bot">
+    <button class="nb" id="nb" disabled onclick="goNext()">시작하기</button>
+  </div>
+</div>
+
+<script>
+var cur = 0;
+var total = 6;
+var ans = {};
+var lock = false;
+var lang = 'ko';
+var allSlides = document.querySelectorAll('.sl');
+
+function getSlide(i){ return allSlides[i]; }
+
+/* 언어 전환 */
+function setLang(l){
+  lang = l;
+  var btns = document.querySelectorAll('.lang-btn');
+  btns[0].classList.toggle('active', l==='ko');
+  btns[1].classList.toggle('active', l==='en');
+
+  var els = document.querySelectorAll('[data-ko]');
+  for(var i=0;i<els.length;i++){
+    var txt = els[i].getAttribute('data-'+l);
+    if(txt) els[i].innerHTML = txt;
+  }
+
+  var ta = document.getElementById('ta');
+  if(ta) ta.placeholder = ta.getAttribute('data-ph-'+l);
+
+  updateBtn();
+}
+
+function pick(btn){
+  if(lock) return;
+  var sl = btn.closest('.sl');
+  var key = sl.dataset.key;
+  var type = sl.dataset.type;
+  var idx = parseInt(btn.dataset.idx);
+
+  if(type === 'single'){
+    ans[key] = idx;
+    var btns = sl.querySelectorAll('.ob');
+    for(var j=0;j<btns.length;j++){
+      btns[j].classList.toggle('sel', parseInt(btns[j].dataset.idx) === idx);
+    }
+    lock = true;
+    setTimeout(function(){ moveTo(cur+1); lock=false; }, 300);
+  } else {
+    if(!ans[key]) ans[key] = [];
+    var p = ans[key].indexOf(idx);
+    if(p > -1) ans[key].splice(p,1); else ans[key].push(idx);
+    btn.classList.toggle('sel');
+    updateBtn();
+  }
+}
+
+function onTa(){
+  ans['freetext'] = document.getElementById('ta').value;
+  updateBtn();
+}
+
+function moveTo(i){
+  if(i < 0 || i >= allSlides.length) return;
+  getSlide(cur).classList.remove('on');
+  cur = i;
+  getSlide(cur).classList.add('on');
+  updateChrome();
+  updateBtn();
+}
+
+function updateChrome(){
+  var hdr = document.getElementById('hdr');
+  var prog = document.getElementById('prog');
+  if(cur === 0){
+    hdr.classList.add('off');
+    prog.classList.add('off');
+  } else if(cur === allSlides.length - 1){
+    hdr.classList.remove('off');
+    prog.classList.add('off');
+  } else {
+    hdr.classList.remove('off');
+    prog.classList.remove('off');
+    var pct = (cur / total) * 100;
+    document.getElementById('pf').style.width = pct + '%';
+    document.getElementById('pt').textContent = cur + ' / ' + total;
+  }
+}
+
+var btnText = {
+  ko:{start:'시작하기',next:'다음',skip:'건너뛰기',select:'선택해주세요'},
+  en:{start:'Start',next:'Next',skip:'Skip',select:'Please select'}
+};
+
+function updateBtn(){
+  var btn = document.getElementById('nb');
+  var sl = getSlide(cur);
+  var type = sl.dataset.type || '';
+  var key = sl.dataset.key || '';
+  var t = btnText[lang];
+
+  if(cur === 0){
+    btn.className='nb'; btn.textContent=t.start; btn.disabled=false;
+  } else if(cur === allSlides.length - 1){
+    btn.className='nb off';
+  } else if(type === 'text'){
+    btn.className='nb';
+    btn.textContent = (ans[key] && ans[key].trim()) ? t.next : t.skip;
+    btn.disabled = false;
+  } else if(type === 'multi'){
+    btn.className='nb';
+    var a = ans[key] || [];
+    btn.textContent = a.length > 0 ? t.next : t.select;
+    btn.disabled = a.length === 0;
+  } else {
+    btn.className='nb';
+    btn.textContent = ans[key] !== undefined ? t.next : t.select;
+    btn.disabled = ans[key] === undefined;
+  }
+}
+
+function goNext(){ if(!lock) moveTo(cur+1); }
+function back(){ if(!lock) moveTo(cur-1); }
+
+updateChrome();
+updateBtn();
+</script>
+</body>
+</html>
