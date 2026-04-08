@@ -5,25 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>점심 요가 설문 관리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---bg:#EDEDEA;
+--bg:#EFECE7;
 --card:#FFFFFF;
 --text:#1A1A1A;
---sub:#8A8A86;
---green:#2D5F3F;
---green-light:#E6EEEA;
---coral:#E8673C;
---purple:#8B6DB5;
---pink:#E8A0C8;
---radius:14px;
+--sub:#8C8A85;
+--green:#3B6B4C;
+--green-light:#D4E4D8;
+--coral:#E07040;
+--purple:#9B8ABF;
+--pink:#E8B0C8;
+--amber:#D4A843;
+--teal:#6AACA0;
 }
 html,body{
 min-height:100%;
-font-family:'Noto Sans KR',sans-serif;
+font-family:'Noto Sans KR','DM Sans',sans-serif;
 background:var(--bg);
 color:var(--text);
 -webkit-font-smoothing:antialiased;
@@ -36,140 +37,179 @@ padding:20px;
 }
 .login-box{
 background:var(--card);
-border-radius:var(--radius);
-padding:44px 40px;
-width:100%;max-width:370px;
+border-radius:4px;
+padding:48px 40px;
+width:100%;max-width:360px;
 text-align:center;
 }
 .login-ico{
-width:64px;height:64px;border-radius:50%;
+width:56px;height:56px;border-radius:50%;
 background:var(--green);
 display:flex;align-items:center;justify-content:center;
-font-size:28px;margin:0 auto 22px;
+font-size:24px;margin:0 auto 20px;
 }
 .login-t{
-font-family:'Noto Serif KR',serif;
-font-size:21px;font-weight:600;margin-bottom:8px;
+font-family:'DM Sans',sans-serif;
+font-size:20px;font-weight:700;margin-bottom:6px;
+letter-spacing:-0.3px;
 }
-.login-s{font-size:13px;color:var(--sub);margin-bottom:26px;line-height:1.6}
+.login-s{font-size:13px;color:var(--sub);margin-bottom:28px;line-height:1.5}
 .login-input{
-width:100%;padding:13px 18px;
-border:1.5px solid #DDDDD9;border-radius:10px;
+width:100%;padding:12px 16px;
+border:1.5px solid #DDDBD6;border-radius:4px;
 background:var(--bg);
-font-family:inherit;font-size:15px;
+font-family:inherit;font-size:14px;
 color:var(--text);outline:none;
 transition:border-color 0.2s;
 text-align:center;letter-spacing:4px;
 }
 .login-input:focus{border-color:var(--green)}
-.login-input::placeholder{letter-spacing:0;color:#B0B0AC}
+.login-input::placeholder{letter-spacing:0;color:#B0AEA9}
 .login-btn{
-width:100%;padding:14px;margin-top:14px;
-border:none;border-radius:10px;
+width:100%;padding:13px;margin-top:12px;
+border:none;border-radius:4px;
 background:var(--green);color:#fff;
-font-family:inherit;font-size:15px;font-weight:600;
+font-family:inherit;font-size:14px;font-weight:600;
 cursor:pointer;transition:background 0.2s;
 }
-.login-btn:hover{background:#245233}
+.login-btn:hover{background:#2E5840}
 .login-btn:active{transform:scale(0.98)}
-.login-err{font-size:13px;color:#D4544C;margin-top:14px;display:none}
+.login-err{font-size:12px;color:#D4544C;margin-top:12px;display:none}
 
-.dash{display:none;max-width:960px;margin:0 auto;padding:28px 22px 48px}
-.dash-hdr{
+.dash{display:none;max-width:1000px;margin:0 auto;padding:32px 24px 48px}
+
+.dash-top{
 display:flex;align-items:center;justify-content:space-between;
-margin-bottom:24px;flex-wrap:wrap;gap:12px;
+margin-bottom:8px;
 }
 .dash-t{
-font-family:'Noto Serif KR',serif;
-font-size:22px;font-weight:600;
+font-family:'DM Sans',sans-serif;
+font-size:24px;font-weight:700;
+letter-spacing:-0.5px;
 }
-.dash-meta{font-size:12px;color:var(--sub);margin-top:4px}
-.pill-btn{
-padding:8px 16px;
-border:none;border-radius:8px;
+.dash-actions{display:flex;gap:6px}
+.act-btn{
+padding:7px 14px;
+border:1.5px solid #DDDBD6;border-radius:4px;
 background:var(--card);
 font-family:inherit;font-size:12px;color:var(--sub);
-cursor:pointer;transition:all 0.2s;
+cursor:pointer;transition:all 0.15s;
 }
-.pill-btn:hover{color:var(--green)}
+.act-btn:hover{border-color:var(--green);color:var(--green)}
+
+.dash-meta{font-size:12px;color:var(--sub);margin-bottom:24px}
 
 .tabs{
-display:flex;gap:4px;
-background:var(--card);
-border-radius:10px;padding:4px;
-margin-bottom:22px;width:fit-content;
+display:flex;gap:0;
+border-bottom:1.5px solid #DDDBD6;
+margin-bottom:24px;
 }
 .tab-btn{
-padding:8px 20px;border:none;border-radius:8px;
+padding:10px 20px;border:none;
 background:transparent;font-family:inherit;
 font-size:13px;font-weight:500;color:var(--sub);
-cursor:pointer;transition:all 0.2s;
+cursor:pointer;transition:all 0.15s;
+border-bottom:2px solid transparent;
+margin-bottom:-1.5px;
 }
-.tab-btn.on{background:var(--green);color:#fff}
+.tab-btn.on{color:var(--green);border-bottom-color:var(--green)}
+
+.panel{display:none}
+.panel.on{display:block}
 
 .stats-row{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:10px;margin-bottom:22px;
+grid-template-columns:repeat(3,1fr);
+gap:8px;margin-bottom:20px;
 }
 .stat-card{
-border-radius:var(--radius);
-padding:20px 22px;
+background:var(--card);
+border-radius:4px;
+padding:24px;
+position:relative;
 }
-.stat-card.main{background:var(--green)}
-.stat-card.main .stat-label{color:rgba(255,255,255,0.6)}
-.stat-card.main .stat-value{color:#fff}
-.stat-card.sub{background:var(--card)}
-.stat-label{font-size:11px;color:var(--sub);margin-bottom:6px;letter-spacing:0.3px}
-.stat-value{font-size:28px;font-weight:600;color:var(--text)}
+.stat-card.hero{background:var(--green)}
+.stat-card.hero .s-label{color:rgba(255,255,255,0.55)}
+.stat-card.hero .s-num{color:#fff}
+.s-label{
+font-size:11px;color:var(--sub);
+text-transform:uppercase;
+letter-spacing:0.8px;
+font-weight:500;
+margin-bottom:8px;
+}
+.s-num{
+font-family:'DM Sans',sans-serif;
+font-size:40px;font-weight:700;
+letter-spacing:-1px;
+color:var(--text);
+line-height:1;
+}
+.s-tag{
+position:absolute;top:16px;right:16px;
+width:28px;height:28px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+font-size:13px;
+}
 
 .chart-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:10px;margin-bottom:22px;
+grid-template-columns:repeat(2,1fr);
+gap:8px;margin-bottom:20px;
 }
 .chart-card{
 background:var(--card);
-border-radius:var(--radius);
-padding:22px 24px;
+border-radius:4px;
+padding:24px;
 }
-.chart-title{font-size:13px;font-weight:600;margin-bottom:16px;color:var(--text)}
+.chart-hdr{
+display:flex;align-items:center;justify-content:space-between;
+margin-bottom:16px;
+}
+.chart-title{font-size:13px;font-weight:600;color:var(--text)}
+.chart-badge{
+width:28px;height:28px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+font-size:12px;
+}
 .chart-wrap{position:relative;width:100%}
 
 .tbl-wrap{
 background:var(--card);
-border-radius:var(--radius);
+border-radius:4px;
 overflow:hidden;
 }
 .tbl-scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-thead{background:var(--bg)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{border-bottom:1.5px solid #EEECEA}
 th{
 padding:12px 16px;text-align:left;
-font-weight:500;color:var(--sub);
+font-weight:600;color:var(--sub);
 white-space:nowrap;font-size:11px;
-letter-spacing:0.4px;
+text-transform:uppercase;
+letter-spacing:0.5px;
 }
 td{
-padding:12px 16px;
-border-bottom:1px solid var(--bg);
+padding:11px 16px;
+border-bottom:1px solid #F4F2EF;
 color:var(--text);
-max-width:180px;
+max-width:160px;
 overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+font-size:12px;
 }
 tr:last-child td{border-bottom:none}
-@media(hover:hover){tr:hover td{background:#F8F8F6}}
+@media(hover:hover){tr:hover td{background:#FAFAF8}}
 
-.empty-msg{padding:60px 20px;text-align:center;color:var(--sub);font-size:14px}
-.loading{text-align:center;padding:60px 20px;color:var(--sub);font-size:14px}
-.panel{display:none}
-.panel.on{display:block}
+.empty-msg{padding:60px 20px;text-align:center;color:var(--sub);font-size:13px}
+.loading{text-align:center;padding:60px 20px;color:var(--sub);font-size:13px}
 
-@media(max-width:600px){
-.dash{padding:18px 14px 36px}
-.dash-t{font-size:19px}
+@media(max-width:700px){
+.dash{padding:20px 14px 36px}
+.dash-t{font-size:20px}
 .chart-grid{grid-template-columns:1fr}
-.stats-row{grid-template-columns:repeat(2,1fr)}
+.stats-row{grid-template-columns:1fr 1fr}
+.stats-row .stat-card:first-child{grid-column:1/-1}
+.s-num{font-size:32px}
 .login-box{padding:36px 28px}
 }
 </style>
@@ -179,7 +219,7 @@ tr:last-child td{border-bottom:none}
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
     <div class="login-ico">🧘‍♀️</div>
-    <div class="login-t">설문 관리</div>
+    <div class="login-t">Survey Admin</div>
     <div class="login-s">설문 결과를 확인하려면<br>비밀번호를 입력하세요</div>
     <input class="login-input" id="pwInput" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
     <button class="login-btn" onclick="tryLogin()">로그인</button>
@@ -188,16 +228,14 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <div class="dash" id="dash">
-  <div class="dash-hdr">
-    <div>
-      <div class="dash-t">점심 요가 설문 결과</div>
-      <div class="dash-meta" id="metaText">불러오는 중...</div>
-    </div>
-    <div style="display:flex;gap:6px">
-      <button class="pill-btn" onclick="loadData()">↻ 새로고침</button>
-      <button class="pill-btn" onclick="logout()">로그아웃</button>
+  <div class="dash-top">
+    <div class="dash-t">Lunchtime Yoga</div>
+    <div class="dash-actions">
+      <button class="act-btn" onclick="loadData()">↻ 새로고침</button>
+      <button class="act-btn" onclick="logout()">로그아웃</button>
     </div>
   </div>
+  <div class="dash-meta" id="metaText">불러오는 중...</div>
 
   <div class="tabs">
     <button class="tab-btn on" onclick="switchTab('stats',this)">통계</button>
@@ -223,6 +261,14 @@ var SHEET_URL='https://script.google.com/macros/s/AKfycbz_p7Hit6jIQtXV2hWmRAlTiI
 var PASSWORD='yoga2026';
 var rows=[];
 var charts=[];
+
+var tagColors=[
+  {bg:'#D4E4D8',color:'#3B6B4C'},
+  {bg:'#FAE0D0',color:'#E07040'},
+  {bg:'#E8DDF2',color:'#7B68A6'},
+  {bg:'#F6E0EC',color:'#C06090'},
+  {bg:'#F0E6CC',color:'#A08530'}
+];
 
 function tryLogin(){
   var pw=document.getElementById('pwInput').value;
@@ -265,7 +311,7 @@ function renderMeta(){
   var txt='총 '+total+'명 응답';
   if(total>0){
     var last=rows[total-1]['제출시간'];
-    if(last){var d=new Date(last);txt+='  ·  마지막 응답: '+d.toLocaleDateString('ko-KR');}
+    if(last){var d=new Date(last);txt+=' · 마지막 응답 '+d.toLocaleDateString('ko-KR');}
   }
   document.getElementById('metaText').textContent=txt;
 }
@@ -292,9 +338,9 @@ function renderStats(){
   var total=rows.length;var koCount=0,enCount=0;
   for(var i=0;i<rows.length;i++){if(rows[i]['언어']==='en')enCount++;else koCount++;}
   var html='';
-  html+='<div class="stat-card main"><div class="stat-label">총 응답</div><div class="stat-value">'+total+'</div></div>';
-  html+='<div class="stat-card sub"><div class="stat-label">한국어</div><div class="stat-value">'+koCount+'</div></div>';
-  html+='<div class="stat-card sub"><div class="stat-label">English</div><div class="stat-value">'+enCount+'</div></div>';
+  html+='<div class="stat-card hero"><div class="s-label">Total responses</div><div class="s-num">'+total+'</div><div class="s-tag" style="background:rgba(255,255,255,0.2)"><span style="color:#fff;font-size:14px">✦</span></div></div>';
+  html+='<div class="stat-card"><div class="s-label">한국어</div><div class="s-num">'+koCount+'</div><div class="s-tag" style="background:'+tagColors[0].bg+'"><span style="color:'+tagColors[0].color+';font-size:14px">K</span></div></div>';
+  html+='<div class="stat-card"><div class="s-label">English</div><div class="s-num">'+enCount+'</div><div class="s-tag" style="background:'+tagColors[1].bg+'"><span style="color:'+tagColors[1].color+';font-size:14px">E</span></div></div>';
   document.getElementById('statsRow').innerHTML=html;
 }
 function countField(field){
@@ -307,18 +353,18 @@ function countField(field){
   return counts;
 }
 
-var palette=['#2D5F3F','#E8673C','#8B6DB5','#E8A0C8','#1A1A1A','#B0A898','#5A8F6E'];
-var paletteSoft=['rgba(45,95,63,0.75)','rgba(232,103,60,0.75)','rgba(139,109,181,0.75)','rgba(232,160,200,0.75)','rgba(26,26,26,0.5)','rgba(176,168,152,0.75)','rgba(90,143,110,0.75)'];
+var palette=['#3B6B4C','#E07040','#9B8ABF','#E8B0C8','#D4A843','#6AACA0','#1A1A1A'];
+var paletteSoft=['rgba(59,107,76,0.7)','rgba(224,112,64,0.7)','rgba(155,138,191,0.7)','rgba(232,176,200,0.7)','rgba(212,168,67,0.7)','rgba(106,172,160,0.7)','rgba(26,26,26,0.35)'];
 
 function renderCharts(){
   for(var c=0;c<charts.length;c++){charts[c].destroy();}
   charts=[];
   var fields=[
-    {key:'요가경험',title:'요가 경험',type:'doughnut'},
-    {key:'선호강도',title:'선호 강도',type:'doughnut'},
-    {key:'업무복귀 걱정',title:'업무 복귀 시 걱정',type:'bar'},
-    {key:'집중부위',title:'집중 부위 (복수)',type:'bar'},
-    {key:'주의사항',title:'주의 사항 (복수)',type:'bar'}
+    {key:'요가경험',title:'요가 경험',type:'doughnut',ti:0},
+    {key:'선호강도',title:'선호 강도',type:'doughnut',ti:1},
+    {key:'업무복귀 걱정',title:'업무 복귀 시 걱정',type:'bar',ti:2},
+    {key:'집중부위',title:'집중 부위 (복수)',type:'bar',ti:3},
+    {key:'주의사항',title:'주의 사항 (복수)',type:'bar',ti:4}
   ];
   var grid=document.getElementById('chartGrid');
   grid.innerHTML='';
@@ -330,28 +376,29 @@ function renderCharts(){
     var values=[];
     for(var l=0;l<labels.length;l++) values.push(counts[labels[l]]);
     if(labels.length===0) continue;
+    var tc=tagColors[fi.ti%tagColors.length];
     var card=document.createElement('div');
     card.className='chart-card';
-    card.innerHTML='<div class="chart-title">'+fi.title+'</div><div class="chart-wrap"><canvas id="chart-'+f+'"></canvas></div>';
+    card.innerHTML='<div class="chart-hdr"><div class="chart-title">'+fi.title+'</div><div class="chart-badge" style="background:'+tc.bg+'"><span style="color:'+tc.color+'">●</span></div></div><div class="chart-wrap"><canvas id="chart-'+f+'"></canvas></div>';
     grid.appendChild(card);
     var ctx=document.getElementById('chart-'+f).getContext('2d');
     var cfg;
     if(fi.type==='doughnut'){
       cfg={
         type:'doughnut',
-        data:{labels:labels,datasets:[{data:values,backgroundColor:palette.slice(0,labels.length),borderColor:'#fff',borderWidth:2}]},
-        options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{font:{family:'Noto Sans KR',size:11},padding:12,usePointStyle:true,pointStyleWidth:8}}}}
+        data:{labels:labels,datasets:[{data:values,backgroundColor:palette.slice(0,labels.length),borderColor:'#FFFFFF',borderWidth:3}]},
+        options:{responsive:true,maintainAspectRatio:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{family:'Noto Sans KR',size:11},padding:10,usePointStyle:true,pointStyleWidth:8}}}}
       };
     } else {
       var barColors=[];
       for(var b=0;b<labels.length;b++) barColors.push(paletteSoft[b%paletteSoft.length]);
       var canvasEl=document.getElementById('chart-'+f);
-      canvasEl.style.height=(labels.length*44+40)+'px';
+      canvasEl.style.height=(labels.length*40+36)+'px';
       cfg={
         type:'bar',
-        data:{labels:labels,datasets:[{data:values,backgroundColor:barColors,borderColor:palette.slice(0,labels.length),borderWidth:1.5,borderRadius:6,barThickness:24}]},
+        data:{labels:labels,datasets:[{data:values,backgroundColor:barColors,borderColor:palette.slice(0,labels.length),borderWidth:1,borderRadius:2,barThickness:22}]},
         options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},
-          scales:{x:{beginAtZero:true,ticks:{stepSize:1,font:{family:'Noto Sans KR',size:11}},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{family:'Noto Sans KR',size:11}},grid:{display:false}}}}
+          scales:{x:{beginAtZero:true,ticks:{stepSize:1,font:{family:'DM Sans',size:11}},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{family:'Noto Sans KR',size:11}},grid:{display:false}}}}
       };
     }
     charts.push(new Chart(ctx,cfg));
