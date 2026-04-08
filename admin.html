@@ -10,24 +10,46 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---bg:#FAF6F1;
---card:#FFFFFF;
+--glass:rgba(255,255,255,0.55);
+--glass-strong:rgba(255,255,255,0.72);
+--glass-border:rgba(255,255,255,0.5);
 --text:#3D3530;
---sub:#A89F97;
---accent:#C4856A;
---accent-light:#F5E6DE;
---accent-dark:#A86B52;
---border:#EDE6DF;
---pill-bg:#F3EDE7;
---radius:16px;
+--sub:#9E9590;
+--accent:#D4856E;
+--accent-soft:rgba(212,133,110,0.15);
+--accent-dark:#B86B52;
+--radius:20px;
+--blur:16px;
 }
 html,body{
 min-height:100%;
 font-family:'Noto Sans KR',sans-serif;
-background:linear-gradient(180deg, #FDF9F5 0%, #F5EDE4 40%, #EFE4D9 100%);
-background-attachment:fixed;
 color:var(--text);
 -webkit-font-smoothing:antialiased;
+}
+body{
+background:#F2E8DF;
+background-image:
+  radial-gradient(ellipse at 15% 20%, rgba(232,190,172,0.5) 0%, transparent 50%),
+  radial-gradient(ellipse at 85% 15%, rgba(210,180,210,0.35) 0%, transparent 45%),
+  radial-gradient(ellipse at 50% 80%, rgba(190,210,220,0.3) 0%, transparent 50%),
+  radial-gradient(ellipse at 80% 70%, rgba(240,200,170,0.3) 0%, transparent 40%);
+background-attachment:fixed;
+}
+
+.glass{
+background:var(--glass);
+backdrop-filter:blur(var(--blur));
+-webkit-backdrop-filter:blur(var(--blur));
+border:1px solid var(--glass-border);
+border-radius:var(--radius);
+}
+.glass-strong{
+background:var(--glass-strong);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.6);
+border-radius:var(--radius);
 }
 
 /* 로그인 */
@@ -37,191 +59,192 @@ align-items:center;justify-content:center;
 padding:20px;
 }
 .login-box{
-background:var(--card);
-border-radius:var(--radius);
-padding:40px 36px;
+padding:44px 40px;
 width:100%;max-width:380px;
 text-align:center;
-box-shadow:0 2px 12px rgba(60,40,30,0.06);
 }
 .login-ico{
-width:64px;height:64px;border-radius:50%;
-background:var(--accent-light);
+width:68px;height:68px;border-radius:50%;
+background:var(--accent-soft);
+backdrop-filter:blur(8px);
 display:flex;align-items:center;justify-content:center;
-font-size:28px;margin:0 auto 20px;
+font-size:30px;margin:0 auto 22px;
+border:1px solid rgba(212,133,110,0.2);
 }
 .login-t{
 font-family:'Noto Serif KR',serif;
-font-size:20px;font-weight:600;margin-bottom:8px;
+font-size:21px;font-weight:600;margin-bottom:8px;
 }
-.login-s{font-size:13px;color:var(--sub);margin-bottom:24px}
+.login-s{font-size:13px;color:var(--sub);margin-bottom:26px;line-height:1.6}
 .login-input{
 width:100%;padding:14px 18px;
-border:1.5px solid var(--border);border-radius:12px;
+border:1px solid rgba(255,255,255,0.5);
+border-radius:14px;
+background:rgba(255,255,255,0.45);
+backdrop-filter:blur(8px);
 font-family:inherit;font-size:15px;
 color:var(--text);outline:none;
-transition:border-color 0.2s;
+transition:all 0.25s;
 text-align:center;
 letter-spacing:4px;
 }
-.login-input:focus{border-color:var(--accent)}
-.login-input::placeholder{letter-spacing:0;color:#C8BFB7}
+.login-input:focus{
+border-color:var(--accent);
+background:rgba(255,255,255,0.65);
+}
+.login-input::placeholder{letter-spacing:0;color:#BFAEA5}
 .login-btn{
-width:100%;padding:14px;margin-top:14px;
-border:none;border-radius:12px;
+width:100%;padding:15px;margin-top:16px;
+border:none;border-radius:14px;
 background:var(--accent);color:#fff;
 font-family:inherit;font-size:15px;font-weight:600;
-cursor:pointer;transition:background 0.2s;
+cursor:pointer;
+transition:all 0.25s;
 }
-.login-btn:hover{background:var(--accent-dark)}
+.login-btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.login-btn:active{transform:translateY(0)}
 .login-err{
-font-size:13px;color:#D4544C;margin-top:12px;
+font-size:13px;color:#D4544C;margin-top:14px;
 display:none;
 }
 
 /* 대시보드 */
-.dash{display:none;max-width:960px;margin:0 auto;padding:24px 20px 40px}
+.dash{display:none;max-width:980px;margin:0 auto;padding:28px 22px 48px}
 .dash-hdr{
 display:flex;align-items:center;justify-content:space-between;
-margin-bottom:28px;flex-wrap:wrap;gap:12px;
+margin-bottom:28px;flex-wrap:wrap;gap:14px;
 }
 .dash-t{
 font-family:'Noto Serif KR',serif;
-font-size:22px;font-weight:600;
+font-size:23px;font-weight:600;
 }
-.dash-meta{font-size:13px;color:var(--sub)}
-.dash-logout{
-padding:8px 16px;border:1.5px solid var(--border);
-border-radius:10px;background:var(--card);
+.dash-meta{font-size:13px;color:var(--sub);margin-top:4px}
+.pill-btn{
+padding:9px 18px;
+border:1px solid var(--glass-border);
+border-radius:12px;
+background:var(--glass);
+backdrop-filter:blur(10px);
 font-family:inherit;font-size:13px;color:var(--sub);
-cursor:pointer;transition:all 0.2s;
+cursor:pointer;transition:all 0.25s;
 }
-.dash-logout:hover{border-color:var(--accent);color:var(--accent)}
+.pill-btn:hover{
+background:rgba(255,255,255,0.7);
+color:var(--accent);
+border-color:rgba(212,133,110,0.3);
+}
 
 /* 탭 */
 .tabs{
 display:flex;gap:4px;
-background:var(--pill-bg);
-border-radius:12px;padding:4px;
-margin-bottom:24px;width:fit-content;
+background:rgba(255,255,255,0.35);
+backdrop-filter:blur(10px);
+border:1px solid var(--glass-border);
+border-radius:14px;padding:4px;
+margin-bottom:26px;width:fit-content;
 }
 .tab-btn{
-padding:8px 20px;border:none;border-radius:10px;
+padding:9px 22px;border:none;border-radius:11px;
 background:transparent;font-family:inherit;
 font-size:14px;font-weight:500;color:var(--sub);
-cursor:pointer;transition:all 0.2s;
+cursor:pointer;transition:all 0.25s;
 }
 .tab-btn.on{
-background:var(--card);color:var(--text);
-box-shadow:0 1px 4px rgba(60,40,30,0.08);
+background:rgba(255,255,255,0.7);
+color:var(--text);
+border:1px solid rgba(255,255,255,0.5);
 }
 
-/* 통계 카드 그리드 */
+/* 통계 카드 */
 .stats-row{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:12px;margin-bottom:28px;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:14px;margin-bottom:26px;
 }
 .stat-card{
-background:var(--card);
-border-radius:var(--radius);
-padding:18px 20px;
-box-shadow:0 1px 3px rgba(60,40,30,0.04);
+padding:22px 24px;
+position:relative;
+overflow:hidden;
 }
-.stat-label{font-size:12px;color:var(--sub);margin-bottom:6px}
-.stat-value{font-size:26px;font-weight:600;color:var(--text)}
+.stat-card::after{
+content:'';position:absolute;
+top:-20px;right:-20px;
+width:70px;height:70px;
+border-radius:50%;
+background:var(--accent-soft);
+}
+.stat-label{font-size:12px;color:var(--sub);margin-bottom:8px;position:relative;z-index:1}
+.stat-value{font-size:28px;font-weight:600;color:var(--text);position:relative;z-index:1}
 
-/* 차트 영역 */
+/* 차트 */
 .chart-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:20px;margin-bottom:28px;
+gap:16px;margin-bottom:28px;
 }
-.chart-card{
-background:var(--card);
-border-radius:var(--radius);
-padding:24px;
-box-shadow:0 1px 3px rgba(60,40,30,0.04);
-}
+.chart-card{padding:26px}
 .chart-title{
 font-size:14px;font-weight:600;
-margin-bottom:16px;color:var(--text);
+margin-bottom:18px;color:var(--text);
 }
 .chart-wrap{position:relative;width:100%;max-height:260px}
 
 /* 테이블 */
-.tbl-wrap{
-background:var(--card);
-border-radius:var(--radius);
-overflow:hidden;
-box-shadow:0 1px 3px rgba(60,40,30,0.04);
-}
+.tbl-wrap{overflow:hidden}
 .tbl-scroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-thead{background:var(--pill-bg)}
+thead{background:rgba(255,255,255,0.3)}
 th{
-padding:12px 16px;text-align:left;
+padding:13px 16px;text-align:left;
 font-weight:500;color:var(--sub);
 white-space:nowrap;font-size:12px;
 letter-spacing:0.3px;
-border-bottom:1px solid var(--border);
+border-bottom:1px solid rgba(255,255,255,0.4);
 }
 td{
-padding:12px 16px;
-border-bottom:1px solid var(--border);
+padding:13px 16px;
+border-bottom:1px solid rgba(0,0,0,0.04);
 color:var(--text);
 max-width:200px;
 overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--pill-bg)}
+tr:hover td{background:rgba(255,255,255,0.25)}
+
 .empty-msg{
 padding:60px 20px;text-align:center;
 color:var(--sub);font-size:14px;
 }
-
-/* 로딩 */
 .loading{
 text-align:center;padding:60px 20px;
 color:var(--sub);font-size:14px;
 }
 
-/* 패널 */
 .panel{display:none}
 .panel.on{display:block}
 
-/* 새로고침 버튼 */
-.refresh-btn{
-padding:8px 16px;border:1.5px solid var(--border);
-border-radius:10px;background:var(--card);
-font-family:inherit;font-size:13px;color:var(--sub);
-cursor:pointer;transition:all 0.2s;
-}
-.refresh-btn:hover{border-color:var(--accent);color:var(--accent)}
-
 @media(max-width:600px){
-.dash{padding:16px 14px 32px}
-.dash-t{font-size:19px}
+.dash{padding:18px 14px 36px}
+.dash-t{font-size:20px}
 .chart-grid{grid-template-columns:1fr}
 .stats-row{grid-template-columns:repeat(2,1fr)}
+.login-box{padding:36px 28px}
 }
 </style>
 </head>
 <body>
 
-<!-- 로그인 -->
 <div class="login-wrap" id="loginWrap">
-  <div class="login-box">
-    <div class="login-ico">🔒</div>
-    <div class="login-t">관리자 로그인</div>
-    <div class="login-s">설문 결과를 확인하려면 비밀번호를 입력하세요</div>
+  <div class="login-box glass-strong">
+    <div class="login-ico">🧘‍♀️</div>
+    <div class="login-t">설문 관리</div>
+    <div class="login-s">설문 결과를 확인하려면<br>비밀번호를 입력하세요</div>
     <input class="login-input" id="pwInput" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
     <button class="login-btn" onclick="tryLogin()">로그인</button>
     <div class="login-err" id="loginErr">비밀번호가 올바르지 않습니다</div>
   </div>
 </div>
 
-<!-- 대시보드 -->
 <div class="dash" id="dash">
   <div class="dash-hdr">
     <div>
@@ -229,8 +252,8 @@ cursor:pointer;transition:all 0.2s;
       <div class="dash-meta" id="metaText">불러오는 중...</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="refresh-btn" onclick="loadData()">↻ 새로고침</button>
-      <button class="dash-logout" onclick="logout()">로그아웃</button>
+      <button class="pill-btn" onclick="loadData()">↻ 새로고침</button>
+      <button class="pill-btn" onclick="logout()">로그아웃</button>
     </div>
   </div>
 
@@ -239,15 +262,13 @@ cursor:pointer;transition:all 0.2s;
     <button class="tab-btn" onclick="switchTab('list',this)">응답 목록</button>
   </div>
 
-  <!-- 통계 패널 -->
   <div class="panel on" id="panelStats">
     <div class="stats-row" id="statsRow"></div>
     <div class="chart-grid" id="chartGrid"></div>
   </div>
 
-  <!-- 목록 패널 -->
   <div class="panel" id="panelList">
-    <div class="tbl-wrap">
+    <div class="tbl-wrap glass">
       <div class="tbl-scroll" id="tblArea">
         <div class="loading">데이터를 불러오는 중...</div>
       </div>
@@ -256,14 +277,14 @@ cursor:pointer;transition:all 0.2s;
 </div>
 
 <script>
-var SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jIQtXV2hWmRAlTiIbhrAXRBHrA-YmQiuaAEb_J-LdDndGcZYcNqrZ8iRSq/exec';
-var PASSWORD = 'yoga2026';
-var rows = [];
-var charts = [];
+var SHEET_URL='https://script.google.com/macros/s/AKfycbz_p7Hit6jIQtXV2hWmRAlTiIbhrAXRBHrA-YmQiuaAEb_J-LdDndGcZYcNqrZ8iRSq/exec';
+var PASSWORD='yoga2026';
+var rows=[];
+var charts=[];
 
 function tryLogin(){
-  var pw = document.getElementById('pwInput').value;
-  if(pw === PASSWORD){
+  var pw=document.getElementById('pwInput').value;
+  if(pw===PASSWORD){
     document.getElementById('loginWrap').style.display='none';
     document.getElementById('dash').style.display='block';
     loadData();
@@ -272,214 +293,133 @@ function tryLogin(){
     document.getElementById('pwInput').value='';
   }
 }
-
 function logout(){
   document.getElementById('dash').style.display='none';
   document.getElementById('loginWrap').style.display='flex';
   document.getElementById('pwInput').value='';
   document.getElementById('loginErr').style.display='none';
 }
-
 function switchTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
-  document.getElementById('panelStats').classList.toggle('on', tab==='stats');
-  document.getElementById('panelList').classList.toggle('on', tab==='list');
+  document.getElementById('panelStats').classList.toggle('on',tab==='stats');
+  document.getElementById('panelList').classList.toggle('on',tab==='list');
 }
-
 function loadData(){
   document.getElementById('tblArea').innerHTML='<div class="loading">데이터를 불러오는 중...</div>';
   document.getElementById('metaText').textContent='불러오는 중...';
-
   fetch(SHEET_URL)
     .then(function(r){return r.json()})
     .then(function(data){
-      rows = data;
-      renderMeta();
-      renderTable();
-      renderStats();
-      renderCharts();
+      rows=data;
+      renderMeta();renderTable();renderStats();renderCharts();
     })
     .catch(function(){
       document.getElementById('tblArea').innerHTML='<div class="empty-msg">데이터를 불러오지 못했습니다</div>';
     });
 }
-
 function renderMeta(){
-  var total = rows.length;
-  var txt = '총 ' + total + '명 응답';
-  if(total > 0){
-    var last = rows[total-1]['제출시간'];
-    if(last){
-      var d = new Date(last);
-      txt += '  ·  마지막 응답: ' + d.toLocaleDateString('ko-KR');
-    }
+  var total=rows.length;
+  var txt='총 '+total+'명 응답';
+  if(total>0){
+    var last=rows[total-1]['제출시간'];
+    if(last){var d=new Date(last);txt+='  ·  마지막 응답: '+d.toLocaleDateString('ko-KR');}
   }
-  document.getElementById('metaText').textContent = txt;
+  document.getElementById('metaText').textContent=txt;
 }
-
 function renderTable(){
-  if(rows.length === 0){
-    document.getElementById('tblArea').innerHTML='<div class="empty-msg">아직 응답이 없습니다</div>';
-    return;
-  }
-  var cols = ['제출시간','언어','요가경험','선호강도','업무복귀 걱정','집중부위','주의사항','자유의견'];
-  var h = '<table><thead><tr>';
-  h += '<th>#</th>';
+  if(rows.length===0){document.getElementById('tblArea').innerHTML='<div class="empty-msg">아직 응답이 없습니다</div>';return;}
+  var cols=['제출시간','언어','요가경험','선호강도','업무복귀 걱정','집중부위','주의사항','자유의견'];
+  var h='<table><thead><tr><th>#</th>';
   for(var i=0;i<cols.length;i++) h+='<th>'+cols[i]+'</th>';
-  h += '</tr></thead><tbody>';
+  h+='</tr></thead><tbody>';
   for(var j=rows.length-1;j>=0;j--){
-    var r = rows[j];
-    h += '<tr><td>'+(j+1)+'</td>';
+    var r=rows[j];
+    h+='<tr><td>'+(j+1)+'</td>';
     for(var k=0;k<cols.length;k++){
-      var val = r[cols[k]] || '';
-      if(cols[k]==='제출시간' && val){
-        var d = new Date(val);
-        val = d.toLocaleDateString('ko-KR') + ' ' + d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-      }
-      h += '<td title="'+String(val).replace(/"/g,'&quot;')+'">'+val+'</td>';
+      var val=r[cols[k]]||'';
+      if(cols[k]==='제출시간'&&val){var d=new Date(val);val=d.toLocaleDateString('ko-KR')+' '+d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});}
+      h+='<td title="'+String(val).replace(/"/g,'&quot;')+'">'+val+'</td>';
     }
-    h += '</tr>';
+    h+='</tr>';
   }
-  h += '</tbody></table>';
-  document.getElementById('tblArea').innerHTML = h;
+  h+='</tbody></table>';
+  document.getElementById('tblArea').innerHTML=h;
 }
-
 function renderStats(){
-  var total = rows.length;
-  var koCount = 0, enCount = 0;
-  for(var i=0;i<rows.length;i++){
-    if(rows[i]['언어']==='en') enCount++; else koCount++;
-  }
-  var html = '';
-  html += '<div class="stat-card"><div class="stat-label">총 응답</div><div class="stat-value">'+total+'</div></div>';
-  html += '<div class="stat-card"><div class="stat-label">한국어 응답</div><div class="stat-value">'+koCount+'</div></div>';
-  html += '<div class="stat-card"><div class="stat-label">English 응답</div><div class="stat-value">'+enCount+'</div></div>';
-  document.getElementById('statsRow').innerHTML = html;
+  var total=rows.length;var koCount=0,enCount=0;
+  for(var i=0;i<rows.length;i++){if(rows[i]['언어']==='en')enCount++;else koCount++;}
+  var html='';
+  html+='<div class="stat-card glass"><div class="stat-label">총 응답</div><div class="stat-value">'+total+'</div></div>';
+  html+='<div class="stat-card glass"><div class="stat-label">한국어 응답</div><div class="stat-value">'+koCount+'</div></div>';
+  html+='<div class="stat-card glass"><div class="stat-label">English 응답</div><div class="stat-value">'+enCount+'</div></div>';
+  document.getElementById('statsRow').innerHTML=html;
 }
-
 function countField(field){
-  var counts = {};
+  var counts={};
   for(var i=0;i<rows.length;i++){
-    var val = rows[i][field];
-    if(!val) continue;
-    var items = String(val).split(', ');
-    for(var j=0;j<items.length;j++){
-      var item = items[j].trim();
-      if(item){
-        counts[item] = (counts[item]||0) + 1;
-      }
-    }
+    var val=rows[i][field];if(!val)continue;
+    var items=String(val).split(', ');
+    for(var j=0;j<items.length;j++){var item=items[j].trim();if(item){counts[item]=(counts[item]||0)+1;}}
   }
   return counts;
 }
 
-var palette = [
-  'rgba(196,133,106,0.8)',
-  'rgba(168,107,82,0.8)',
-  'rgba(139,90,66,0.8)',
-  'rgba(215,166,145,0.8)',
-  'rgba(180,140,120,0.8)',
-  'rgba(160,120,100,0.8)',
-  'rgba(200,175,155,0.8)'
+var palette=[
+  'rgba(212,133,110,0.7)',
+  'rgba(190,160,200,0.7)',
+  'rgba(160,195,210,0.7)',
+  'rgba(230,180,140,0.7)',
+  'rgba(175,200,175,0.7)',
+  'rgba(220,170,185,0.7)',
+  'rgba(200,190,160,0.7)'
 ];
-var paletteBorder = [
-  '#C4856A','#A86B52','#8B5A42',
-  '#D7A691','#B48C78','#A07864','#C8AF9B'
+var paletteBorder=[
+  '#D4856E','#BEA0C8','#A0C3D2',
+  '#E6B48C','#AFC8AF','#DCAAB9','#C8BEA0'
 ];
 
 function renderCharts(){
   for(var c=0;c<charts.length;c++){charts[c].destroy();}
-  charts = [];
-
-  var fields = [
-    {key:'요가경험', title:'요가 경험', type:'doughnut'},
-    {key:'선호강도', title:'선호 강도', type:'doughnut'},
-    {key:'업무복귀 걱정', title:'업무 복귀 시 걱정', type:'bar'},
-    {key:'집중부위', title:'집중 부위 (복수)', type:'bar'},
-    {key:'주의사항', title:'주의 사항 (복수)', type:'bar'}
+  charts=[];
+  var fields=[
+    {key:'요가경험',title:'요가 경험',type:'doughnut'},
+    {key:'선호강도',title:'선호 강도',type:'doughnut'},
+    {key:'업무복귀 걱정',title:'업무 복귀 시 걱정',type:'bar'},
+    {key:'집중부위',title:'집중 부위 (복수)',type:'bar'},
+    {key:'주의사항',title:'주의 사항 (복수)',type:'bar'}
   ];
-
-  var grid = document.getElementById('chartGrid');
-  grid.innerHTML = '';
-
-  if(rows.length === 0){
-    grid.innerHTML = '<div class="empty-msg">차트를 표시할 데이터가 없습니다</div>';
-    return;
-  }
-
+  var grid=document.getElementById('chartGrid');
+  grid.innerHTML='';
+  if(rows.length===0){grid.innerHTML='<div class="empty-msg">차트를 표시할 데이터가 없습니다</div>';return;}
   for(var f=0;f<fields.length;f++){
-    var fi = fields[f];
-    var counts = countField(fi.key);
-    var labels = Object.keys(counts);
-    var values = [];
+    var fi=fields[f];
+    var counts=countField(fi.key);
+    var labels=Object.keys(counts);
+    var values=[];
     for(var l=0;l<labels.length;l++) values.push(counts[labels[l]]);
-
-    if(labels.length === 0) continue;
-
-    var card = document.createElement('div');
-    card.className = 'chart-card';
-    card.innerHTML = '<div class="chart-title">'+fi.title+'</div><div class="chart-wrap"><canvas id="chart-'+f+'"></canvas></div>';
+    if(labels.length===0) continue;
+    var card=document.createElement('div');
+    card.className='chart-card glass';
+    card.innerHTML='<div class="chart-title">'+fi.title+'</div><div class="chart-wrap"><canvas id="chart-'+f+'"></canvas></div>';
     grid.appendChild(card);
-
-    var ctx = document.getElementById('chart-'+f).getContext('2d');
+    var ctx=document.getElementById('chart-'+f).getContext('2d');
     var cfg;
-
-    if(fi.type === 'doughnut'){
-      cfg = {
+    if(fi.type==='doughnut'){
+      cfg={
         type:'doughnut',
-        data:{
-          labels:labels,
-          datasets:[{
-            data:values,
-            backgroundColor:palette.slice(0,labels.length),
-            borderColor:paletteBorder.slice(0,labels.length),
-            borderWidth:1.5
-          }]
-        },
-        options:{
-          responsive:true,
-          maintainAspectRatio:true,
-          plugins:{
-            legend:{position:'bottom',labels:{font:{family:'Noto Sans KR',size:12},padding:14,usePointStyle:true,pointStyleWidth:8}}
-          }
-        }
+        data:{labels:labels,datasets:[{data:values,backgroundColor:palette.slice(0,labels.length),borderColor:paletteBorder.slice(0,labels.length),borderWidth:1.5}]},
+        options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Noto Sans KR',size:12},padding:14,usePointStyle:true,pointStyleWidth:8}}}}
       };
     } else {
-      cfg = {
+      cfg={
         type:'bar',
-        data:{
-          labels:labels,
-          datasets:[{
-            data:values,
-            backgroundColor:'rgba(196,133,106,0.65)',
-            borderColor:'#C4856A',
-            borderWidth:1.5,
-            borderRadius:6,
-            barThickness:32
-          }]
-        },
-        options:{
-          responsive:true,
-          maintainAspectRatio:true,
-          indexAxis:'y',
-          plugins:{legend:{display:false}},
-          scales:{
-            x:{
-              beginAtZero:true,
-              ticks:{stepSize:1,font:{family:'Noto Sans KR',size:11}},
-              grid:{color:'rgba(0,0,0,0.04)'}
-            },
-            y:{
-              ticks:{font:{family:'Noto Sans KR',size:12}},
-              grid:{display:false}
-            }
-          }
-        }
+        data:{labels:labels,datasets:[{data:values,backgroundColor:'rgba(212,133,110,0.5)',borderColor:'rgba(212,133,110,0.8)',borderWidth:1.5,borderRadius:8,barThickness:28}]},
+        options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},
+          scales:{x:{beginAtZero:true,ticks:{stepSize:1,font:{family:'Noto Sans KR',size:11}},grid:{color:'rgba(0,0,0,0.03)'}},y:{ticks:{font:{family:'Noto Sans KR',size:12}},grid:{display:false}}}}
       };
     }
-
-    charts.push(new Chart(ctx, cfg));
+    charts.push(new Chart(ctx,cfg));
   }
 }
 </script>
