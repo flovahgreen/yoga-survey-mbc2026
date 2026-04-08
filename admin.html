@@ -10,66 +10,42 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---glass:rgba(255,255,255,0.55);
---glass-strong:rgba(255,255,255,0.72);
---glass-border:rgba(255,255,255,0.5);
---text:#3D3530;
---sub:#9E9590;
---accent:#D4856E;
---accent-soft:rgba(212,133,110,0.15);
---accent-dark:#B86B52;
---radius:20px;
---blur:16px;
+--bg:#EDEDEA;
+--card:#FFFFFF;
+--text:#1A1A1A;
+--sub:#8A8A86;
+--green:#2D5F3F;
+--green-light:#E6EEEA;
+--coral:#E8673C;
+--purple:#8B6DB5;
+--pink:#E8A0C8;
+--radius:14px;
 }
 html,body{
 min-height:100%;
 font-family:'Noto Sans KR',sans-serif;
+background:var(--bg);
 color:var(--text);
 -webkit-font-smoothing:antialiased;
 }
-body{
-background:#F2E8DF;
-background-image:
-  radial-gradient(ellipse at 15% 20%, rgba(232,190,172,0.5) 0%, transparent 50%),
-  radial-gradient(ellipse at 85% 15%, rgba(210,180,210,0.35) 0%, transparent 45%),
-  radial-gradient(ellipse at 50% 80%, rgba(190,210,220,0.3) 0%, transparent 50%),
-  radial-gradient(ellipse at 80% 70%, rgba(240,200,170,0.3) 0%, transparent 40%);
-background-attachment:fixed;
-}
 
-.glass{
-background:var(--glass);
-backdrop-filter:blur(var(--blur));
--webkit-backdrop-filter:blur(var(--blur));
-border:1px solid var(--glass-border);
-border-radius:var(--radius);
-}
-.glass-strong{
-background:var(--glass-strong);
-backdrop-filter:blur(20px);
--webkit-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,0.6);
-border-radius:var(--radius);
-}
-
-/* 로그인 */
 .login-wrap{
 min-height:100vh;display:flex;
 align-items:center;justify-content:center;
 padding:20px;
 }
 .login-box{
+background:var(--card);
+border-radius:var(--radius);
 padding:44px 40px;
-width:100%;max-width:380px;
+width:100%;max-width:370px;
 text-align:center;
 }
 .login-ico{
-width:68px;height:68px;border-radius:50%;
-background:var(--accent-soft);
-backdrop-filter:blur(8px);
+width:64px;height:64px;border-radius:50%;
+background:var(--green);
 display:flex;align-items:center;justify-content:center;
-font-size:30px;margin:0 auto 22px;
-border:1px solid rgba(212,133,110,0.2);
+font-size:28px;margin:0 auto 22px;
 }
 .login-t{
 font-family:'Noto Serif KR',serif;
@@ -77,155 +53,121 @@ font-size:21px;font-weight:600;margin-bottom:8px;
 }
 .login-s{font-size:13px;color:var(--sub);margin-bottom:26px;line-height:1.6}
 .login-input{
-width:100%;padding:14px 18px;
-border:1px solid rgba(255,255,255,0.5);
-border-radius:14px;
-background:rgba(255,255,255,0.45);
-backdrop-filter:blur(8px);
+width:100%;padding:13px 18px;
+border:1.5px solid #DDDDD9;border-radius:10px;
+background:var(--bg);
 font-family:inherit;font-size:15px;
 color:var(--text);outline:none;
-transition:all 0.25s;
-text-align:center;
-letter-spacing:4px;
+transition:border-color 0.2s;
+text-align:center;letter-spacing:4px;
 }
-.login-input:focus{
-border-color:var(--accent);
-background:rgba(255,255,255,0.65);
-}
-.login-input::placeholder{letter-spacing:0;color:#BFAEA5}
+.login-input:focus{border-color:var(--green)}
+.login-input::placeholder{letter-spacing:0;color:#B0B0AC}
 .login-btn{
-width:100%;padding:15px;margin-top:16px;
-border:none;border-radius:14px;
-background:var(--accent);color:#fff;
+width:100%;padding:14px;margin-top:14px;
+border:none;border-radius:10px;
+background:var(--green);color:#fff;
 font-family:inherit;font-size:15px;font-weight:600;
-cursor:pointer;
-transition:all 0.25s;
+cursor:pointer;transition:background 0.2s;
 }
-.login-btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
-.login-btn:active{transform:translateY(0)}
-.login-err{
-font-size:13px;color:#D4544C;margin-top:14px;
-display:none;
-}
+.login-btn:hover{background:#245233}
+.login-btn:active{transform:scale(0.98)}
+.login-err{font-size:13px;color:#D4544C;margin-top:14px;display:none}
 
-/* 대시보드 */
-.dash{display:none;max-width:980px;margin:0 auto;padding:28px 22px 48px}
+.dash{display:none;max-width:960px;margin:0 auto;padding:28px 22px 48px}
 .dash-hdr{
 display:flex;align-items:center;justify-content:space-between;
-margin-bottom:28px;flex-wrap:wrap;gap:14px;
+margin-bottom:24px;flex-wrap:wrap;gap:12px;
 }
 .dash-t{
 font-family:'Noto Serif KR',serif;
-font-size:23px;font-weight:600;
+font-size:22px;font-weight:600;
 }
-.dash-meta{font-size:13px;color:var(--sub);margin-top:4px}
+.dash-meta{font-size:12px;color:var(--sub);margin-top:4px}
 .pill-btn{
-padding:9px 18px;
-border:1px solid var(--glass-border);
-border-radius:12px;
-background:var(--glass);
-backdrop-filter:blur(10px);
-font-family:inherit;font-size:13px;color:var(--sub);
-cursor:pointer;transition:all 0.25s;
+padding:8px 16px;
+border:none;border-radius:8px;
+background:var(--card);
+font-family:inherit;font-size:12px;color:var(--sub);
+cursor:pointer;transition:all 0.2s;
 }
-.pill-btn:hover{
-background:rgba(255,255,255,0.7);
-color:var(--accent);
-border-color:rgba(212,133,110,0.3);
-}
+.pill-btn:hover{color:var(--green)}
 
-/* 탭 */
 .tabs{
 display:flex;gap:4px;
-background:rgba(255,255,255,0.35);
-backdrop-filter:blur(10px);
-border:1px solid var(--glass-border);
-border-radius:14px;padding:4px;
-margin-bottom:26px;width:fit-content;
+background:var(--card);
+border-radius:10px;padding:4px;
+margin-bottom:22px;width:fit-content;
 }
 .tab-btn{
-padding:9px 22px;border:none;border-radius:11px;
+padding:8px 20px;border:none;border-radius:8px;
 background:transparent;font-family:inherit;
-font-size:14px;font-weight:500;color:var(--sub);
-cursor:pointer;transition:all 0.25s;
+font-size:13px;font-weight:500;color:var(--sub);
+cursor:pointer;transition:all 0.2s;
 }
-.tab-btn.on{
-background:rgba(255,255,255,0.7);
-color:var(--text);
-border:1px solid rgba(255,255,255,0.5);
-}
+.tab-btn.on{background:var(--green);color:#fff}
 
-/* 통계 카드 */
 .stats-row{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-gap:14px;margin-bottom:26px;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:10px;margin-bottom:22px;
 }
 .stat-card{
-padding:22px 24px;
-position:relative;
-overflow:hidden;
+border-radius:var(--radius);
+padding:20px 22px;
 }
-.stat-card::after{
-content:'';position:absolute;
-top:-20px;right:-20px;
-width:70px;height:70px;
-border-radius:50%;
-background:var(--accent-soft);
-}
-.stat-label{font-size:12px;color:var(--sub);margin-bottom:8px;position:relative;z-index:1}
-.stat-value{font-size:28px;font-weight:600;color:var(--text);position:relative;z-index:1}
+.stat-card.main{background:var(--green)}
+.stat-card.main .stat-label{color:rgba(255,255,255,0.6)}
+.stat-card.main .stat-value{color:#fff}
+.stat-card.sub{background:var(--card)}
+.stat-label{font-size:11px;color:var(--sub);margin-bottom:6px;letter-spacing:0.3px}
+.stat-value{font-size:28px;font-weight:600;color:var(--text)}
 
-/* 차트 */
 .chart-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:16px;margin-bottom:28px;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:10px;margin-bottom:22px;
 }
-.chart-card{padding:26px}
-.chart-title{
-font-size:14px;font-weight:600;
-margin-bottom:18px;color:var(--text);
+.chart-card{
+background:var(--card);
+border-radius:var(--radius);
+padding:22px 24px;
 }
-.chart-wrap{position:relative;width:100%;max-height:260px}
+.chart-title{font-size:13px;font-weight:600;margin-bottom:16px;color:var(--text)}
+.chart-wrap{position:relative;width:100%;max-height:250px}
 
-/* 테이블 */
-.tbl-wrap{overflow:hidden}
+.tbl-wrap{
+background:var(--card);
+border-radius:var(--radius);
+overflow:hidden;
+}
 .tbl-scroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-thead{background:rgba(255,255,255,0.3)}
+thead{background:var(--bg)}
 th{
-padding:13px 16px;text-align:left;
+padding:12px 16px;text-align:left;
 font-weight:500;color:var(--sub);
-white-space:nowrap;font-size:12px;
-letter-spacing:0.3px;
-border-bottom:1px solid rgba(255,255,255,0.4);
+white-space:nowrap;font-size:11px;
+letter-spacing:0.4px;
 }
 td{
-padding:13px 16px;
-border-bottom:1px solid rgba(0,0,0,0.04);
+padding:12px 16px;
+border-bottom:1px solid var(--bg);
 color:var(--text);
-max-width:200px;
+max-width:180px;
 overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,0.25)}
+@media(hover:hover){tr:hover td{background:#F8F8F6}}
 
-.empty-msg{
-padding:60px 20px;text-align:center;
-color:var(--sub);font-size:14px;
-}
-.loading{
-text-align:center;padding:60px 20px;
-color:var(--sub);font-size:14px;
-}
-
+.empty-msg{padding:60px 20px;text-align:center;color:var(--sub);font-size:14px}
+.loading{text-align:center;padding:60px 20px;color:var(--sub);font-size:14px}
 .panel{display:none}
 .panel.on{display:block}
 
 @media(max-width:600px){
 .dash{padding:18px 14px 36px}
-.dash-t{font-size:20px}
+.dash-t{font-size:19px}
 .chart-grid{grid-template-columns:1fr}
 .stats-row{grid-template-columns:repeat(2,1fr)}
 .login-box{padding:36px 28px}
@@ -235,7 +177,7 @@ color:var(--sub);font-size:14px;
 <body>
 
 <div class="login-wrap" id="loginWrap">
-  <div class="login-box glass-strong">
+  <div class="login-box">
     <div class="login-ico">🧘‍♀️</div>
     <div class="login-t">설문 관리</div>
     <div class="login-s">설문 결과를 확인하려면<br>비밀번호를 입력하세요</div>
@@ -251,7 +193,7 @@ color:var(--sub);font-size:14px;
       <div class="dash-t">점심 요가 설문 결과</div>
       <div class="dash-meta" id="metaText">불러오는 중...</div>
     </div>
-    <div style="display:flex;gap:8px">
+    <div style="display:flex;gap:6px">
       <button class="pill-btn" onclick="loadData()">↻ 새로고침</button>
       <button class="pill-btn" onclick="logout()">로그아웃</button>
     </div>
@@ -268,7 +210,7 @@ color:var(--sub);font-size:14px;
   </div>
 
   <div class="panel" id="panelList">
-    <div class="tbl-wrap glass">
+    <div class="tbl-wrap">
       <div class="tbl-scroll" id="tblArea">
         <div class="loading">데이터를 불러오는 중...</div>
       </div>
@@ -350,9 +292,9 @@ function renderStats(){
   var total=rows.length;var koCount=0,enCount=0;
   for(var i=0;i<rows.length;i++){if(rows[i]['언어']==='en')enCount++;else koCount++;}
   var html='';
-  html+='<div class="stat-card glass"><div class="stat-label">총 응답</div><div class="stat-value">'+total+'</div></div>';
-  html+='<div class="stat-card glass"><div class="stat-label">한국어 응답</div><div class="stat-value">'+koCount+'</div></div>';
-  html+='<div class="stat-card glass"><div class="stat-label">English 응답</div><div class="stat-value">'+enCount+'</div></div>';
+  html+='<div class="stat-card main"><div class="stat-label">총 응답</div><div class="stat-value">'+total+'</div></div>';
+  html+='<div class="stat-card sub"><div class="stat-label">한국어</div><div class="stat-value">'+koCount+'</div></div>';
+  html+='<div class="stat-card sub"><div class="stat-label">English</div><div class="stat-value">'+enCount+'</div></div>';
   document.getElementById('statsRow').innerHTML=html;
 }
 function countField(field){
@@ -360,24 +302,13 @@ function countField(field){
   for(var i=0;i<rows.length;i++){
     var val=rows[i][field];if(!val)continue;
     var items=String(val).split(', ');
-    for(var j=0;j<items.length;j++){var item=items[j].trim();if(item){counts[item]=(counts[item]||0)+1;}}
+    for(var j=0;j<items.length;j++){var item=items[j].trim();if(item)counts[item]=(counts[item]||0)+1;}
   }
   return counts;
 }
 
-var palette=[
-  'rgba(212,133,110,0.7)',
-  'rgba(190,160,200,0.7)',
-  'rgba(160,195,210,0.7)',
-  'rgba(230,180,140,0.7)',
-  'rgba(175,200,175,0.7)',
-  'rgba(220,170,185,0.7)',
-  'rgba(200,190,160,0.7)'
-];
-var paletteBorder=[
-  '#D4856E','#BEA0C8','#A0C3D2',
-  '#E6B48C','#AFC8AF','#DCAAB9','#C8BEA0'
-];
+var palette=['#2D5F3F','#E8673C','#8B6DB5','#E8A0C8','#1A1A1A','#B0A898','#5A8F6E'];
+var paletteSoft=['rgba(45,95,63,0.75)','rgba(232,103,60,0.75)','rgba(139,109,181,0.75)','rgba(232,160,200,0.75)','rgba(26,26,26,0.5)','rgba(176,168,152,0.75)','rgba(90,143,110,0.75)'];
 
 function renderCharts(){
   for(var c=0;c<charts.length;c++){charts[c].destroy();}
@@ -400,7 +331,7 @@ function renderCharts(){
     for(var l=0;l<labels.length;l++) values.push(counts[labels[l]]);
     if(labels.length===0) continue;
     var card=document.createElement('div');
-    card.className='chart-card glass';
+    card.className='chart-card';
     card.innerHTML='<div class="chart-title">'+fi.title+'</div><div class="chart-wrap"><canvas id="chart-'+f+'"></canvas></div>';
     grid.appendChild(card);
     var ctx=document.getElementById('chart-'+f).getContext('2d');
@@ -408,15 +339,17 @@ function renderCharts(){
     if(fi.type==='doughnut'){
       cfg={
         type:'doughnut',
-        data:{labels:labels,datasets:[{data:values,backgroundColor:palette.slice(0,labels.length),borderColor:paletteBorder.slice(0,labels.length),borderWidth:1.5}]},
-        options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Noto Sans KR',size:12},padding:14,usePointStyle:true,pointStyleWidth:8}}}}
+        data:{labels:labels,datasets:[{data:values,backgroundColor:palette.slice(0,labels.length),borderColor:'#fff',borderWidth:2}]},
+        options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{font:{family:'Noto Sans KR',size:11},padding:12,usePointStyle:true,pointStyleWidth:8}}}}
       };
     } else {
+      var barColors=[];
+      for(var b=0;b<labels.length;b++) barColors.push(paletteSoft[b%paletteSoft.length]);
       cfg={
         type:'bar',
-        data:{labels:labels,datasets:[{data:values,backgroundColor:'rgba(212,133,110,0.5)',borderColor:'rgba(212,133,110,0.8)',borderWidth:1.5,borderRadius:8,barThickness:28}]},
+        data:{labels:labels,datasets:[{data:values,backgroundColor:barColors,borderColor:palette.slice(0,labels.length),borderWidth:1.5,borderRadius:6,barThickness:24}]},
         options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},
-          scales:{x:{beginAtZero:true,ticks:{stepSize:1,font:{family:'Noto Sans KR',size:11}},grid:{color:'rgba(0,0,0,0.03)'}},y:{ticks:{font:{family:'Noto Sans KR',size:12}},grid:{display:false}}}}
+          scales:{x:{beginAtZero:true,ticks:{stepSize:1,font:{family:'Noto Sans KR',size:11}},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{family:'Noto Sans KR',size:11}},grid:{display:false}}}}
       };
     }
     charts.push(new Chart(ctx,cfg));
