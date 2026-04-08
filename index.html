@@ -374,8 +374,71 @@ function onTa(){
   updateBtn();
 }
 
+var SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_p7Hit6jIQtXV2hWmRAlTiIbhrAXRBHrA-YmQiuaAEb_J-LdDndGcZYcNqrZ8iRSq/exec';
+
+/* 선택지 텍스트 매핑 */
+var labels = {
+  exp: {
+    ko:['처음이에요','가끔 해봤어요','꾸준히 하고 있어요'],
+    en:['First time','Tried a few times','Practicing regularly']
+  },
+  intensity: {
+    ko:['가볍게 스트레칭 위주','적당히 움직이기','좀 강하게 해도 괜찮아요'],
+    en:['Light stretching','Moderate movement','Okay with intense']
+  },
+  afterwork: {
+    ko:['너무 나른해지는 것','시간이 빠듯한 것','땀이 많이 나는 것','별로 신경 쓰이지 않아요'],
+    en:['Feeling too drowsy','Tight schedule','Sweating too much','Not really concerned']
+  },
+  focus: {
+    ko:['목/어깨','허리/골반','하체/다리','손목/손','전신 골고루'],
+    en:['Neck/Shoulders','Lower back/Hips','Legs','Wrists/Hands','Full body']
+  },
+  concern: {
+    ko:['디스크/허리 질환','무릎 통증','목 통증','임신 중','특별히 없어요'],
+    en:['Disc/Back issues','Knee pain','Neck pain','Pregnant','Nothing in particular']
+  }
+};
+
+function getLabel(key, idx){
+  var l = labels[key];
+  if(!l) return idx;
+  var arr = l[lang] || l['ko'];
+  return arr[idx] || idx;
+}
+
+function getMultiLabels(key, idxArr){
+  if(!idxArr || idxArr.length === 0) return '';
+  var result = [];
+  for(var i=0;i<idxArr.length;i++){
+    result.push(getLabel(key, idxArr[i]));
+  }
+  return result.join(', ');
+}
+
+function submitToSheet(){
+  var payload = {
+    lang: lang,
+    exp: ans.exp !== undefined ? getLabel('exp', ans.exp) : '',
+    intensity: ans.intensity !== undefined ? getLabel('intensity', ans.intensity) : '',
+    afterwork: ans.afterwork !== undefined ? getLabel('afterwork', ans.afterwork) : '',
+    focus: getMultiLabels('focus', ans.focus),
+    concern: getMultiLabels('concern', ans.concern),
+    freetext: ans.freetext || ''
+  };
+
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  }).catch(function(){});
+}
+
 function moveTo(i){
   if(i < 0 || i >= allSlides.length) return;
+  /* 완료 화면으로 넘어갈 때 응답 전송 */
+  if(i === allSlides.length - 1) submitToSheet();
   getSlide(cur).classList.remove('on');
   cur = i;
   getSlide(cur).classList.add('on');
